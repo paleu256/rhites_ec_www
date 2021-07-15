@@ -165,6 +165,7 @@ urlpatterns = [
     url(r'scorecards/reports/reports_sites_2016_to_2017\.php', views.reports_sites_2016_to_2017, name='reports_sites_2016_to_2017'),
     url(r'scorecards/reports/reports_sites_2017_to_2018\.php', views.reports_sites_2017_to_2018, name='reports_sites_2017_to_2018'),
     url(r'scorecards/reports/reports_sites_2018_to_2019\.php', views.reports_sites_2018_to_2019, name='reports_sites_2018_to_2019'),
+    url(r'scorecards/reports/reports_sites_2019_to_2020\.php', views.reports_sites_2019_to_2020, name='reports_sites_2019_to_2020'),
 
     #suplementary tools
     #TB PREV
