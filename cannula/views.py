@@ -10087,6 +10087,10 @@ def reports_sites_2018_to_2019(request):
 def reports_sites_2019_to_2020(request):
     return render(request, 'cannula/performance_summary_oct_2019–sep_2020.html')
 
+@login_required
+def reports_sites_2020_to_2021(request):
+    return render(request, 'cannula/performance_summary_oct_2020–sep_2021.html')
+
 #suplemetary logic
 @login_required
 def tb_prev(request, output_format='HTML'):
