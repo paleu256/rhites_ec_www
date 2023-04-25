@@ -32,177 +32,34 @@
             <li class="active">
                 <a href="{% url 'index' %}"><i class="fa fa-line-chart fa-fw"></i> Dashboard <span class="fa arrow"></span></a>
                 <ul class="nav nav-second-level">
+  
+                    <li>
+                        <a href="{% url 'dashboard_gbvqaatool' %}"><b>GBV QA</b></a>
+                    </li>
+                    
+                    <li>
+                        <a href="{% url 'performance_reports' %}">Nutrition</a>
+                    </li>
 
                     <li>
-                        <a href="{% url 'thematic_malaria' %}">Malaria</a>
-                    </li>
-                    <li>
-                        <a href="{% url 'thematic_mnch' %}">Maternal &amp; Child Health</a>
-                    </li>
-                    <li>
-                        <a href="{% url 'malaria_and_rmnch_additional_scorecard' %}"><b>Malaria &amp; RMNCH Additional</b></a>
-                    </li>
-                    <li>
-                        <a href="{% url 'thematic_fp' %}">Family Planning</a>
-                    </li>
-                    <li>
-                        <a href="{% url 'thematic_nutrition' %}">Nutrition</a>
-                    </li>
-                    <li>
-                        <a href="{% url 'thematic_hiv' %}">HIV</a>
-                    </li>
-                    <li>
-                        <a href="{% url 'thematic_pmtct' %}">PMTCT/EID</a>
-                    </li>
-                    <li>
-                        <a href="{% url 'thematic_vmmc' %}">VMMC</a>
-                    </li>
-                    <li>
-                        <a href="{% url 'thematic_tb' %}">Tuberculosis &amp; TB/HIV</a>
-                    </li>
-                    <li>
-                        <a href="{% url 'thematic_lab' %}">Lab Tests</a>
-                    </li>
-                    <li>
-                        <a href="{% url 'thematic_sc' %}">Supply Chain</a>
-                    </li>
-                    <li>
-                        <a href="{% url 'wash_scorecard' %}"><b>WASH</b></a>
+                        <a href="{% url 'performance_reports' %}"><b>WASH</b></a>
                     </li>
                 </ul>
             </li>
-
-            <li class="active">
-                <a href="{% url 'index' %}"><i class="fa fa-line-chart fa-fw"></i> Dashboard-Community <span class="fa arrow"></span></a>
-                <ul class="nav nav-second-level">
-                    <li>
-                        <a href="{% url 'linkages_scorecard' %}"><b>Linkages</b></a>
-                    </li>
-                    <li>
-                        <a href="{% url 'ltfu_scorecard' %}"><b>LTFU</b></a>
-                    </li>
-
-                    <li>
-                        <a href="{% url 'thematic_gbv' %}">GBV</a>
-                    </li>
-                    <li>
-                        <a href="{% url 'lqas_scorecard' %}"><b>LQAS</b></a>
-                         <!-- <a href="{% url 'thematic_lqas' %}">LQAS</a>-->
-                       <!-- <a href="{% url 'thematic_lqas' %}">LQAS</a>-->
-                    </li>
-                    <li>
-                        <a href="{% url 'thematic_kp' %}">Key &amp; Priority Populations</a>
-                    </li>
-                </ul>
-            </li>
-            
-            <!--
-            <li class="active">
-                <a href="{% url 'index' %}"><i class="fa fa-line-chart fa-fw"></i> IFAS <span class="fa arrow"></span></a>
-                <ul class="nav nav-second-level">
-                    <li>
-                        <a href="{% url 'ifas_scorecard' %}">Bottlenek Inventory</a>
-                    </li>
-                </ul>
-            </li>
-            -->
-
+ 
             {% if user.is_staff %}
             <li>
-                <a href="{% url 'index' %}"><i class="fa fa-table fa-fw"></i> Validation Reports <span class="fa arrow"></span></a>
+                <a href="{% url 'index' %}"><i class="fa fa-table fa-fw"></i> Data Capture/Entry <span class="fa arrow"></span></a>
                 <ul class="nav nav-second-level">
-
                     <li>
-                        <a href="{% url 'validation_rule_listing' 'hiv' %}">HIV</a>
-                    </li>
-                    <li>
-                        <a href="{% url 'validation_rule_listing' 'pmtct' %}">PMTCT/EID</a>
-                    </li>
-                    <li>
-                        <a href="{% url 'validation_rule_listing' 'malaria' %}">Malaria</a>
-                    </li>
-                    <li>
-                        <a href="{% url 'validation_rule_listing' 'mnch' %}">Maternal &amp; Child Health</a>
-                    </li>
-                    <li>
-                        <a href="{% url 'validation_rule_listing' 'nutrition' %}">Nutrition</a>
-                    </li>
-                    <li>
-                        <a href="{% url 'validation_rule_listing' 'tb' %}">Tuberculosis &amp; TB/HIV</a>
-                    </li>
-                    <li>
-                        <a href="{% url 'validation_rule_listing' 'lab' %}">Lab Tests</a>
-                    </li>
-                    <li>
-                        <a href="{% url 'validation_rule_listing' 'vmmc' %}">VMMC</a>
-                    </li>
-                    <li>
-                        <a href="{% url 'validation_rule_listing' 'fp' %}">Family Planning</a>
-                    </li>
-                    <li>
-                        <a href="{% url 'validation_rule_listing' 'gbv' %}">GBV</a>
-                    </li>
-                    <li>
-                        <a href="{% url 'validation_rule_listing' 'sc' %}">Supply Chain</a>
-                    </li>
-                    <li>
-                        <a href="{% url 'validation_rule_listing' 'qi' %}">LQAS</a>
-                    </li>
-                    <li>
-                        <a href="{% url 'validation_rule_listing' 'kp' %}">Key &amp; Priority Populations</a>
-                    </li>
+                        <a href="{% url 'de_gbv_qaa_tool' %}"><b>GBV QAA Tool</b></a>
+                    </li>    
                 </ul>
             </li>
             {% endif %}
-            {% if user.is_staff %}
+           
             <li>
-                <a href="#"><i class="fa fa-wrench fa-fw"></i> Upload Datasets <span class="fa arrow"></span></a>
-                <ul class="nav nav-second-level">
-
-                    <li>
-                        <a href="{% url 'data_workflow_new' "HIV" %}">HIV</a>
-                    </li>
-                    <li>
-                        <a href="{% url 'data_workflow_new' "PMTCT" %}">PMTCT</a>
-                    </li>
-                    <li>
-                        <a href="{% url 'data_workflow_new' "Malaria" %}">Malaria</a>
-                    </li>
-                    <li>
-                        <a href="{% url 'data_workflow_new' "Maternal &amp; Child Health" %}">Maternal &amp; Child Health</a>
-                    </li>
-                    <li>
-                        <a href="{% url 'data_workflow_new' "Nutrition" %}">Nutrition</a>
-                    </li>
-                    <li>
-                        <a href="{% url 'data_workflow_new' "Tuberclosis" %}">Tuberculosis</a>
-                    </li>
-                    <li>
-                        <a href="{% url 'data_workflow_new' "Lab Tests" %}">Lab Tests</a>
-                    </li>
-                    <li>
-                        <a href="{% url 'data_workflow_new' "VMMC" %}">VMMC</a>
-                    </li>
-                    <li>
-                        <a href="{% url 'data_workflow_new' "Family Planning" %}">Family Planning</a>
-                    </li>
-                    <li>
-                        <a href="{% url 'data_workflow_new' "GBV" %}">GBV</a>
-                    </li>
-                    <li>
-                        <a href="{% url 'data_workflow_new' "Supply Chain" %}">Supply Chain</a>
-                    </li>
-                    <li>
-                        <a href="{% url 'data_workflow_new' "LQAS" %}">LQAS</a>
-                    </li>
-                    <li>
-                        <a href="{% url 'data_workflow_new' "Key &amp; Priority Populations" %}">Key &amp; Priority Populations</a>
-                    </li>
-                </ul>
-            </li>
-            {% endif %}
-            <li>
-                <img src="{% static 'cannula/lockup_rhites-ec.png' %}" height="100%" width="100%"/>
+                <img src="{% static 'cannula/lockup_uhausaid_log.png' %}" height="50%" width="100%"/>
             </li>
     </div>
 </div>

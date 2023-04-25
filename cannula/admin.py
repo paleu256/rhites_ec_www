@@ -57,6 +57,6 @@ admin.site.register(ValidationRule, ValidationRuleAdmin)
 admin.site.unregister(auth.models.User) # unregister first, User model already registered
 admin.site.register(auth.models.User, MyUserAdmin)
 
-admin.site.site_title = 'RHITES-EC Performance Monitoring Tool Administrative Interface'
-admin.site.site_header = 'RHITES-EC Performance Monitoring Tool Admin'
+admin.site.site_title = 'UHA Performance Monitoring Tool Administrative Interface'
+admin.site.site_header = 'UHA Performance Monitoring Tool Admin'
 admin.site.index_title = 'System Configuration & Administration'
