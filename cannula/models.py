@@ -4,6 +4,7 @@ from django.db.models.signals import post_init
 from django.core.files.storage import FileSystemStorage
 from django.core.exceptions import ValidationError
 from django.conf import settings
+from .enums import Where_Identified_CHOICES
 
 import logging
 logger = logging.getLogger(__name__)
@@ -59,6 +60,8 @@ def orgunit_cleanup_name(name_str):
         name_str = name_str.replace('H/C I', 'HC I') # matches 'HC II', 'HC III' and 'HC IV'
         name_str = name_str.replace('Health Centre I', 'HC I')
         name_str = name_str.replace('Health Center I', 'HC I')
+        name_str = name_str.replace('HCIV', 'HC IV')
+        name_str = name_str.replace('HCII', 'HC II') # matches HC II and HC III
     return name_str
 
 class OrgUnit(MPTTModel):
@@ -352,6 +355,12 @@ def unpack_data_element(de_long):
     else:
         return (de_instance, None)
 
+from django.db.models import Func
+
+class Collate_C(Func):
+    function = 'COLLATE "C"'
+    template = '%(expressions)s %(function)s'
+
 class DataValueQuerySet(models.QuerySet):
     """Convenience queryset methods for handling datavalues"""
     def what(self, *names):
@@ -365,7 +374,7 @@ class DataValueQuerySet(models.QuerySet):
                 else:
                     de_filters = Q(data_element__name__iexact=de) | Q(data_element__alias__iexact=de)
 
-        qs = self.annotate(de_name=F('data_element__name'))
+        qs = self.annotate(de_name=Collate_C('data_element__name'))
         qs = qs.annotate(de_uid=F('data_element__dhis2_uid'))
         if de_filters:
             qs = qs.filter(de_filters)
@@ -511,7 +520,11 @@ def load_excel_to_datavalues(source_doc):
             else:
                 period = period_cell.value
             iso_year, iso_quarter, iso_month = extract_periods(str(period).strip())
-            location_parts = (settings.ORG_UNIT_ROOT_NAME, *[x.trim() for x in location_parts if x is not none]) # turn to tuple and prepend name of root OrgUnit
+            location_parts = [x.strip() for x in location_parts if x is not None]
+            DISTRICT_SUFFIX_REGEX = re.compile(r'\s*[Dd]istrict\s*$')
+            if DISTRICT_SUFFIX_REGEX.search(location_parts[0]) is None:
+                location_parts[0] = location_parts[0] + ' District'
+            location_parts = (settings.ORG_UNIT_ROOT_NAME, *location_parts) # turn to tuple and prepend name of root OrgUnit
             current_ou = OrgUnit.from_path_recurse(*location_parts)
             location = ' => '.join(location_parts)
             logger.debug((period, location))
@@ -885,3 +898,409 @@ def get_validation_view_names():
     cursor = connection.cursor()
     cursor.execute('SELECT viewname FROM pg_catalog.pg_views WHERE viewowner=%s and viewname LIKE %s;', (settings.DATABASES['default']['USER'], 'vw_validation_%'))
     return [x[0] for x in cursor]
+
+#sumplementary tools
+class TbPrev(models.Model):
+    period = models.CharField("YYYY-MM",max_length=200)
+    district = models.CharField("District",max_length=200)
+    subcounty = models.CharField("Subcounty",max_length=200)
+    healthfacility = models.CharField("Health Facility",max_length=200)
+
+    tbprevc1d = models.IntegerField("tb_prev (d,agesex)  _10-14 years, female",default=0)
+    tbprevc2d = models.IntegerField("tb_prev (d,agesex)  __lt 10 years, female",default=0)
+    tbprevc3d = models.IntegerField("tb_prev (d,agesex)  __lt15 yrs, female",default=0)
+    tbprevc4d = models.IntegerField("tb_prev (d,agesex)  _15+ yrs, female",default=0)
+    tbprevc5d = models.IntegerField("tb_prev (d,agesex)  _female, 15-17 years",default=0)
+    tbprevc6d = models.IntegerField("tb_prev (d,agesex)  _female, 18-Â­24 years",default=0)
+    tbprevc7d = models.IntegerField("tb_prev (d,agesex)  _female, 25+ yrs",default=0)
+    tbprevc8d = models.IntegerField("tb_prev (d,agesex)  _10-14 years, male",default=0)
+    tbprevc9d = models.IntegerField("tb_prev (d,agesex)  __lt 10 years, male",default=0)
+    tbprevc10d = models.IntegerField("tb_prev (d,agesex)  __lt15 yrs, male",default=0)
+    tbprevc11d = models.IntegerField("tb_prev (d,agesex)  _15+ yrs, male",default=0)
+    tbprevc12d = models.IntegerField("tb_prev (d,agesex)  _male, 15-17 years",default=0)
+    tbprevc13d = models.IntegerField("tb_prev (d,agesex)  _male, 18-Â­24 years",default=0)
+    tbprevc14d = models.IntegerField("tb_prev (d,agesex)  _male, 25+ yrs",default=0)
+    tbprevc15d = models.IntegerField("tb_prev (d,agesex)  _ipt by newly enrolled on art, female",default=0)
+    tbprevc16d = models.IntegerField("tb_prev (d,agesex)  _ipt by newly enrolled on art, male",default=0)
+    tbprevc17d = models.IntegerField("tb_prev (d,agesex)  _ipt by newly enrolled on art, total",default=0)
+    tbprevc18d = models.IntegerField("tb_prev (d,agesex)  _ipt by previously enrolled on   art, female",default=0)
+    tbprevc19d = models.IntegerField("tb_prev (d,agesex)  _ipt by previously enrolled on   art, male",default=0)
+    tbprevc20d = models.IntegerField("tb_prev (d,agesex)  _ipt by previously enrolled on   art, total",default=0)
+    tbprevc21d = models.IntegerField("tb_prev (d,type of tb preventative (tpt)_alternative tpt regimen (eg, 3 month inh and rifapentine) by newly enrolled on art, female",default=0)
+    tbprevc22d = models.IntegerField("tb_prev (d,type of tb preventative (tpt)_alternative tpt regimen (eg, 3 month inh and rifapentine) by newly enrolled on art, male",default=0)
+    tbprevc23d = models.IntegerField("tb_prev (d,type of tb preventative (tpt)_alternative tpt regimen (eg, 3 month inh and rifapentine) by newly enrolled on art, total",default=0)
+    tbprevc24d = models.IntegerField("tb_prev (d,type of tb preventative (tpt)_alternative tpt regimen (eg, 3 month inh and rifapentine) by  previously enrolled on art, female",default=0)
+    tbprevc25d = models.IntegerField("tb_prev (d,type of tb preventative (tpt)_alternative tpt regimen (eg, 3 month inh and rifapentine) by  previously enrolled on art, male",default=0)
+    tbprevc26d = models.IntegerField("tb_prev (d,type of tb preventative (tpt)_alternative tpt regimen (eg, 3 month inh and rifapentine) by  previously enrolled on art, total",default=0)
+
+    tbprevc1n = models.IntegerField("tb_prev (n,agesex)  _10-14 years, female",default=0)
+    tbprevc2n = models.IntegerField("tb_prev (n,agesex)  __lt 10 years, female",default=0)
+    tbprevc3n = models.IntegerField("tb_prev (n,agesex)  __lt15 yrs, female",default=0)
+    tbprevc4n = models.IntegerField("tb_prev (n,agesex)  _15+ yrs, female",default=0)
+    tbprevc5n = models.IntegerField("tb_prev (n,agesex)  _female, 15-17 years",default=0)
+    tbprevc6n = models.IntegerField("tb_prev (n,agesex)  _female, 18-Â­24 years",default=0)
+    tbprevc7n = models.IntegerField("tb_prev (n,agesex)  _female, 25+ yrs",default=0)
+    tbprevc8n = models.IntegerField("tb_prev (n,agesex)  _10-14 years, male",default=0)
+    tbprevc9n = models.IntegerField("tb_prev (n,agesex)  __lt 10 years, male",default=0)
+    tbprevc10n = models.IntegerField("tb_prev (n,agesex)  __lt15 yrs, male",default=0)
+    tbprevc11n = models.IntegerField("tb_prev (n,agesex)  _15+ yrs, male",default=0)
+    tbprevc12n = models.IntegerField("tb_prev (n,agesex)  _male, 15-17 years",default=0)
+    tbprevc13n = models.IntegerField("tb_prev (n,agesex)  _male, 18-Â­24 years",default=0)
+    tbprevc14n = models.IntegerField("tb_prev (n,agesex)  _male, 25+ yrs",default=0)
+    tbprevc15n = models.IntegerField("tb_prev (n,agesex)  _ipt by newly enrolled on art, female",default=0)
+    tbprevc16n = models.IntegerField("tb_prev (n,agesex)  _ipt by newly enrolled on art, male",default=0)
+    tbprevc17n = models.IntegerField("tb_prev (n,agesex)  _ipt by newly enrolled on art, total",default=0)
+    tbprevc18n = models.IntegerField("tb_prev (n,agesex)  _ipt by previously enrolled on   art, female",default=0)
+    tbprevc19n = models.IntegerField("tb_prev (n,agesex)  _ipt by previously enrolled on   art, male",default=0)
+    tbprevc20n = models.IntegerField("tb_prev (n,agesex)  _ipt by previously enrolled on   art, total",default=0)
+    tbprevc21n = models.IntegerField("tb_prev (n,type of tb preventative (tpt)_alternative tpt regimen (eg, 3 month inh and rifapentine) by newly enrolled on art, female",default=0)
+    tbprevc22n = models.IntegerField("tb_prev (n,type of tb preventative (tpt)_alternative tpt regimen (eg, 3 month inh and rifapentine) by newly enrolled on art, male",default=0)
+    tbprevc23n = models.IntegerField("tb_prev (n,type of tb preventative (tpt)_alternative tpt regimen (eg, 3 month inh and rifapentine) by newly enrolled on art, total",default=0)
+    tbprevc24n = models.IntegerField("tb_prev (n,type of tb preventative (tpt)_alternative tpt regimen (eg, 3 month inh and rifapentine) by  previously enrolled on art, female",default=0)
+    tbprevc25n = models.IntegerField("tb_prev (n,type of tb preventative (tpt)_alternative tpt regimen (eg, 3 month inh and rifapentine) by  previously enrolled on art, male",default=0)
+    tbprevc26n = models.IntegerField("tb_prev (n,type of tb preventative (tpt)_alternative tpt regimen (eg, 3 month inh and rifapentine) by  previously enrolled on art, total",default=0)
+
+    def __str__(self):
+        return self.period +" "+ self.district +" "+ self.subcounty +" "+ self.healthfacility
+
+class TbPrevTargets(models.Model):
+
+    district = models.CharField("District",max_length=200)
+    subcounty = models.CharField("Subcounty",max_length=200)
+    healthfacility = models.CharField("Health Facility",max_length=200)
+
+    tbprev_tc1n = models.IntegerField("TB_PREV (N) Numerator",default=0)
+    tbprev_tc2n = models.IntegerField("TB_PREV (N) 6-12 months IPT",default=0)
+    tbprev_tc3n = models.IntegerField("TB_PREV (N) Female, <15",default=0)
+    tbprev_tc4n = models.IntegerField("TB_PREV (N) Female, 15+",default=0)
+    tbprev_tc5n = models.IntegerField("TB_PREV (N) Male, <15",default=0)
+    tbprev_tc6n = models.IntegerField("TB_PREV (N) Male, 15+",default=0)
+
+    tbprev_tc1d = models.IntegerField("TB_PREV (D) Numerator",default=0)
+    tbprev_tc2d = models.IntegerField("TB_PREV (D) 6-12 months IPT",default=0)
+    tbprev_tc3d = models.IntegerField("TB_PREV (D) Female, <15",default=0)
+    tbprev_tc4d = models.IntegerField("TB_PREV (D) Female, 15+",default=0)
+    tbprev_tc5d = models.IntegerField("TB_PREV (D) Male, <15",default=0)
+    tbprev_tc6d = models.IntegerField("TB_PREV (D) Male, 15+",default=0)
+
+    def __str__(self):
+        return self.period +" "+ self.district +" "+ self.subcounty +" "+ self.healthfacility
+
+class TbPrev_Scorecard(object):
+    period = ""
+    district = ""
+    subcounty = ""
+    healthfacility = ""
+
+    #data should be computed on facility
+    target15LessN=0
+    target15PlusN=0
+    targetFemaleN=0
+    targetMaleN=0
+    target6To12N=0
+
+    ArtIpt15LessN=0
+    ArtIpt15PlusN=0
+    ArtIptFemaleN=0
+    ArtIptMaleN=0
+    ArtIpt6To12N=0
+    ArtIptContiousN=0
+    ArtIptAlternativeRegimenN=0
+
+    Perf15LessN=0
+    Perf15PlusN=0
+    PerfFemaleN=0
+    PerfMaleN=0
+    Perf6To12N=0
+    
+    #denominator
+    target15LessD=0
+    target15PlusD=0
+    targetFemaleD=0
+    targetMaleD=0
+    target6To12D=0
+
+    ArtIpt15LessD=0
+    ArtIpt15PlusD=0
+    ArtIptFemaleD=0
+    ArtIptMaleD=0
+    ArtIpt6To12D=0
+    ArtIptContiousD=0
+    ArtIptAlternativeRegimenD=0
+
+    Perf15LessD=0
+    Perf15PlusD=0
+    PerfFemaleD=0
+    PerfMaleD=0
+    Perf6To12D=0
+
+    OverAll15Less=0
+    OverAll15Plus=0
+    OverAllFemale=0
+    OverAllMale=0
+    OverAll6To12=0
+    OverAllContious=0
+    OverAllternativeRegimen=0
+
+class Lab(models.Model):
+    period = models.DateField("YYYY-MM",max_length=200)
+    district = models.CharField("District",max_length=200)
+    subcounty = models.CharField("Subcounty",max_length=200)
+    healthfacility = models.CharField("Health Facility",max_length=200)
+
+    dataelement = models.CharField("Data Element",max_length=200)
+    dataelement_value = models.IntegerField("data element value",default=0)
+   
+    def __str__(self):
+        return self.period +" "+ self.district +" "+ self.subcounty +" "+ self.healthfacility
+
+class LabTargets(models.Model):
+    period = models.CharField("YYYY-MM",max_length=200)
+    district = models.CharField("District",max_length=200)
+    subcounty = models.CharField("Subcounty",max_length=200)
+    healthfacility = models.CharField("Health Facility",max_length=200)
+
+    dataelement = models.CharField("Data Element",max_length=200)
+    dataelement_target = models.IntegerField("data element value",default=0)
+
+    def __str__(self):
+        return self.period +" "+ self.district +" "+ self.subcounty +" "+ self.healthfacility
+
+class Lab_Scorecard(object):
+    period = ""
+    district = ""
+    subcounty = ""
+    healthfacility = ""
+
+    annual_target=0
+    vl_samples_sent=-1
+    perct_achievement_monthly=0
+    vl_samples_rejected=0
+    vl_samples_returned=0
+    perct_achievement_sent_annnal=0
+
+    def __init__(self):
+        self.vl_samples_returned =(vl_samples_sent - vl_samples_rejected)
+        self.perct_achievement_sent = (vl_samples_returned/vl_samples_sent) * 100
+
+class RMNCHAndMalaria(models.Model):
+    reporting_period = models.DateField("YYYY-MM",max_length=200)
+    district = models.CharField("District",max_length=200)
+    subcounty = models.CharField("Subcounty",max_length=200)
+    healthfacility = models.CharField("Health Facility",max_length=200)
+    healthfacilitylevel = models.CharField("Health Facility",max_length=200)
+    ownership = models.CharField("Health Facility",max_length=200)
+
+    ipt2_n = models.IntegerField("IPT2_N",default=0)
+    ipt2_d = models.IntegerField("IPT2_D",default=0)
+    amtsl_n = models.IntegerField("AMTSL_N",default=0)
+    amtsl_d = models.IntegerField("AMTSL_D",default=0)
+    asphyxia_n = models.IntegerField("Asphyxia_N",default=0)
+    asphyxia_d = models.IntegerField("Asphyxia_D",default=0)
+    diarrhea_n = models.IntegerField("Diarrhea_N",default=0)
+    diarrhea_d = models.IntegerField("Diarrhea_D",default=0)
+    pneumonia_n = models.IntegerField("Pneumonia_N",default=0)
+    pneumonia_d = models.IntegerField("Pneumonia_D",default=0)
+    ret_n = models.IntegerField("Ret_N",default=0)
+    ret_d = models.IntegerField("Ret_D",default=0)
+    hei_n = models.IntegerField("HEI_N",default=0)
+    hei_d = models.IntegerField("HEI_D",default=0)
+    simple_malaria_n = models.IntegerField("simple_malaria_N",default=0)
+    simple_malaria_d = models.IntegerField("simple_malaria_D",default=0)
+    severe_malaria_n = models.IntegerField("severe_malaria_N",default=0)
+    severe_malaria_d = models.IntegerField("severe_malaria_D",default=0)
+    dmcondoms = models.IntegerField("DOS:Mcondoms",default=0)
+    dfcondoms = models.IntegerField("DOS:Fcondoms",default=0)
+    dmbeads = models.IntegerField("DOS:Mbeads",default=0)
+    dimplanon = models.IntegerField("DOS:Implanon",default=0)
+    djadelle = models.IntegerField("DOS:Jadelle",default=0)
+    diud = models.IntegerField("DOS:IUD",default=0)
+    ddepoprovera = models.IntegerField("DOS:DepoProvera",default=0)
+    dsayana = models.IntegerField("DOS:Sayana",default=0)
+    dpills = models.IntegerField("DOS:Pills",default=0)
+    depills = models.IntegerField("DOS:Epills",default=0)
+
+    #for computation only
+    ipt2=0
+    man3stage=0
+    manbirth=0
+    treatd=0
+    treatp=0
+    pmtct=0
+    mtct=0
+    simple=0
+    severe=0
+
+    #doos properties
+    
+    def __str__(self):
+        return self.reporting_period +" "+ self.district +" "+ self.subcounty +" "+ self.healthfacility
+
+class mnchandmal(object):
+    period=''
+    ipt2=0
+    man3stage=0
+    manbirth=0
+    treatd=0
+    treatp=0
+    pmtct=0
+    mtct=0
+    simple=0
+    severe=0
+
+class DOOS(object):
+
+    district =''
+    subcounty =''
+    healthfacility = ''
+    healthfacilitylevel = ''
+    ownership = ''
+    period=''
+    dmcondoms=0
+    dfcondoms=0
+    dmbeads=0
+    dimplanon=0
+    djadelle=0
+    diud=0
+    ddepoprovera=0
+    dsayana=0
+    dpills=0
+    depills=0
+
+class mnchandmal_dashboard(object):
+    period=''
+    ipt2=0
+    man3stage=0
+    manbirth=0
+    treatd=0
+    treatp=0
+    pmtct=0
+    mtct=0
+    simple=0
+    severe=0
+
+class pmtcteid(models.Model):
+    period = models.DateField("YYYY-MM",max_length=200)
+    district = models.CharField("District",max_length=200)
+    subcounty = models.CharField("Subcounty",max_length=200)
+    healthfacility = models.CharField("Health Facility",max_length=200)
+   
+    ca1 = models.IntegerField("105-2.1 A17:HIV+ Pregnant Women already on ART before 1st ANC (ART-K)",default=0)
+    ca2 = models.IntegerField("105-2.1 A19:Pregnant Women testing HIV+ on a retest (TRR+)",default=0)
+    ca3 = models.IntegerField("105-2.1 A1:ANC 1st Visit for women 10-19 Years",default=0)
+    ca4 = models.IntegerField("105-2.1 A1:ANC 1st Visit for women 20-24 Years",default=0)
+    ca5 = models.IntegerField("105-2.1 A1:ANC 1st Visit for women >=25 Years",default=0)
+    ca6 = models.IntegerField("105-2.1 HIV+ Pregnant Women initiated on ART for EMTCT (ART)",default=0)
+    ca7 = models.IntegerField("105-2.1 Pregnant Women newly tested for HIV this pregnancy(TR & TRR) 10-19 Years",default=0)
+    ca8 = models.IntegerField("105-2.1 Pregnant Women newly tested for HIV this pregnancy(TR & TRR) 20-24 Years",default=0)
+    ca9 = models.IntegerField("105-2.1 Pregnant Women newly tested for HIV this pregnancy(TR & TRR) >=25 Years",default=0)
+    ca10 = models.IntegerField("105-2.1 Pregnant Women tested HIV+ for 1st time this pregnancy (TRR) at any visit 10-19 Years",default=0)
+    ca11 = models.IntegerField("105-2.1 Pregnant Women tested HIV+ for 1st time this pregnancy (TRR) at any visit 20-24 Years",default=0)
+    ca12 = models.IntegerField("105-2.1 Pregnant Women tested HIV+ for 1st time this pregnancy (TRR) at any visit >=25 Years",default=0)
+    ca13 = models.IntegerField("105-2.1a Pregnant Women who knew status before 1st ANC (Total (TRK + TRRK))",default=0)
+    ca14 = models.IntegerField("105-2.1b Pregnant Women who knew status before 1st ANC (HIV+(TRRK))",default=0)
+    ca15 = models.IntegerField("105-2.2a Women testing HIV+ in labour (1st time this Pregnancy)",default=0)
+    ca16 = models.IntegerField("105-2.2b Women testing HIV+ in labour (Retest this Pregnancy)",default=0)
+    ca17 = models.IntegerField("105-2.3a Breastfeeding mothers newly testing HIV+(1st test)",default=0)
+    ca18 = models.IntegerField("105-2.3b Breastfeeding mothers newly testing HIV+(retest)",default=0)
+    ca19 = models.IntegerField("105-2.4a Exposed Infants Tested for HIV Below 18 Months(by 1st PCR)",default=0)
+    ca20 = models.IntegerField("105-2.4b 1st DNA PCR result returned(HIV+)",default=0)
+    ca21 = models.IntegerField("105-2.4c Exposed Infants Tested for HIV Below 18 Months(< 2 Months old)",default=0)
+    ca22 = models.IntegerField("012 1.Total number of HEI in birth cohort (born 24 months previously)",default=0)
+    ca23 = models.IntegerField("012 7.A. Outcomes for HIV exposed infants: Number of HEI being discharged at 18 months as Positive",default=0)
+    ca24 = models.IntegerField("012 7. Outcomes for HIV exposed infants: Total Number of HEI being discharged at 18 months",default=0)
+    ca25 = models.IntegerField("012 7.A. Outcomes for HIV exposed infants: Number of HEI being discharged at 18 months as Negative",default=0)
+    ca26 = models.IntegerField("012 7.D. Outcomes for HIV exposed infants: Transferred out (Number of HEI who were transferred out before 18 months)",default=0)
+    ca27 = models.IntegerField("012 7.E. Outcomes for HIV exposed infants:  Lost to follow (Number of HEI who are lost to follow-up before 18 months)",default=0)
+    ca28 = models.IntegerField("012 7.F. Outcomes for HIV exposed infants: Died (Number of HEI who died before 18 months)",default=0)
+    ca29 = models.IntegerField("012 7.G. Outcomes for HIV exposed infants: In care but no test done at 18 months",default=0)
+
+    def __str__(self):
+        return self.period +" "+ self.district +" "+ self.subcounty +" "+ self.healthfacility
+
+
+class pmtcteid_targets(models.Model):
+    district = models.CharField("District",max_length=200)
+    subcounty = models.CharField("Subcounty",max_length=200)
+    healthfacility = models.CharField("Health Facility",max_length=200)
+   
+    mtct_pmtct_art = models.IntegerField("105-2.1 A17:HIV+ Pregnant Women already on ART before 1st ANC (ART-K)",default=0)
+    pmp = models.IntegerField("105-2.1 A19:Pregnant Women testing HIV+ on a retest (TRR+)",default=0)
+    hivplus_infants = models.IntegerField("105-2.1 A1:ANC 1st Visit for women 10-19 Years",default=0)
+    anci = models.IntegerField("105-2.1 A1:ANC 1st Visit for women 20-24 Years",default=0)
+    pmtctstartpos = models.IntegerField("105-2.1 A1:ANC 1st Visit for women >=25 Years",default=0)
+    pmtctstart = models.IntegerField("105-2.1 HIV+ Pregnant Women initiated on ART for EMTCT (ART)",default=0)
+
+class pmtcteid_dashboard(object):
+    period = ''
+    district = ''
+    healthfacility = ''
+    T_PMTCT_STAT_nANC_D=0
+    ANC_1_visit_D=0
+    perf_T_PMTCT_STAT_nANC_DandANC_1_visit=0
+
+    T_PMTCT_STAT_N=0
+    TRandTRR=0
+    TRKandTRRK=0
+    total_TRandTRRandTRKandTRRK=0 #TRandTRR+TRKandTRRK
+    PMTCT_STAT_1Nand1D=0 #(total_TRandTRRandTRKandTRRK/ANC_1_visit_D)*100
+    PerfPMTCT_STAT=0 #(total_TRandTRRandTRKandTRRK/T_PMTCT_STAT_N)*100
+
+    T_PMTCT_STAT_POS_N=0
+    HIVplusTRRK=0
+    TRRplus=0
+    TRR=0
+    t_HIVplusTRRK_TRRplus_TRR_ANC=0 #HIVplusTRRK+TRRplus+TRR
+    PMTCT_STAT_POS_2N_1D=0 #(t_HIVplusTRRK_TRRplus_TRR_ANC/ANC_1_visit_D)*100
+    PerfPMTCT_STAT_POS=0 #(t_HIVplusTRRK_TRRplus_TRR_ANC/T_PMTCT_STAT_POS_N)*100
+
+    T_PMTCT_ART_N=0
+    ART_K=0
+    ART=0
+    MTCT_3N=0 #ART_K+ART
+    PMTCT_ART=0 #(MTCT_3N/t_HIVplusTRRK_TRRplus_TRR_ANC)*100
+    PerfPMTCT_ART=0 #(MTCT_3N/T_PMTCT_ART_N)* 100
+
+    HEI_discharged_18m=0
+    HEI_transferred_out_before_18m=0
+    HEI_ltfu_before_18m=0
+    HEI_died_before_18m=0
+    HEI_care_but_no_test_done18m=0
+    t_HEI_4N=0 #HEI_discharged_18m+HEI_transferred_out_before_18m+HEI_ltfu_before_18m+HEI_died_before_18m+HEI_care_but_no_test_done18m
+    HEI_in_birth_cohort_24mp_4D=0
+    PMTCT_FO=0 #(t_HEI_4N/HEI_in_birth_cohort_24mp_4D)*100
+
+    T_PMTCT_EID_N=0
+    PMTCT_EIDles2m=0
+    PMTCT_EIDles2_12m=0
+    t_PMTCT_EID2m2_12m=0 #PMTCT_EIDles2m+PMTCT_EIDles2_12m
+    t_HIVplusTRRK_TRRplus_TRR_ANC_c=0 #similar to t_HIVplusTRRK_TRRplus_TRR_ANC
+    Women_HIV_plus_LD=0
+    Breastfeeding_HIV_plus=0
+    t_Women_HIV_plus_LDplusBreastfeeding_HIV_plus=0 #Women_HIV_plus_LD+Breastfeeding_HIV_plus
+    PMTCT_EID=0 #(t_PMTCT_EID2m2_12m/t_Women_HIV_plus_LDplusBreastfeeding_HIV_plus)*100
+    PerfPMTCT_EID=0 #(t_PMTCT_EID2m2_12m/T_PMTCT_EID_N)*100
+
+    T_PMTCT_EID_POS=0
+    PMTCT_EID_POS=0
+    PerfPMTCT_EID_POS=0 #(PMTCT_EID_POS/T_PMTCT_EID_POS)*100
+
+class IFASBottleneck(models.Model):
+    bottleneck=models.CharField("Enter the name of the bottleneck",max_length=200)
+    level=models.CharField("Level",max_length=200)
+    when_identified = models.DateField("Please enter the date when the bottleneck was identified")
+    where_identified = models.IntegerField(choices=Where_Identified_CHOICES, default=1) 
+    potential_solutions=models.CharField("Level",max_length=400)
+    efforts_to_address_bottleneck=models.CharField("Efforts to address the bottleneck",max_length=500)
+    next_steps=models.CharField("Next steps",max_length=500)
+    additional_bottleneck_identified=models.CharField("Additional bottleneck identified during efforts",max_length=500)
+    comments=models.CharField("Comments if any",max_length=500)
+
+    
+
+
+    
+
+
+
+    

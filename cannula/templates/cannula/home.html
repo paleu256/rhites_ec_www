@@ -1,0 +1,62 @@
+{% extends "startmin/base.html" %} {% block title %}UHA Database{% endblock %} 
+{% block heading %} USAID’s Uganda Health Activity (UHA) Uganda {% endblock %} 
+{% block content %}
+{% load staticfiles %}
+
+<style>
+
+        img.wrap {
+                float: left
+        }
+
+        .div1 {
+                float: left;
+                height: 100px;
+                width: 48%;
+        }
+</style>
+
+<html>
+
+<body>
+
+        <div>
+                <div class="div1">
+                        <img class="wrap" src="{% static 'cannula/imageone1.png' %}" hspace="5" />
+
+                        <p><b>WHO ARE WE?</b></p>
+                        <p>Content Still missing </p>
+
+                        <img class="wrap" src="{% static 'cannula/imagetwo1.png' %}" hspace="5" />
+                        <p><b><br><br>Content Still missing
+                                </b></p>
+                       
+                </div>
+
+                <div class="div1" style="margin-left:15px">
+                        <img class="wrap" src="{% static 'cannula/imagethree1.png' %}" hspace="5" />
+
+                        <p><b>WHAT HAVE WE DONE?</b></p>
+                        <p><b></b></p>
+                        <p>
+                                Content Still missing
+                        </p>
+                        <p><b>Facilitating evidence-based decision making</b></p>
+                        <p>
+                                Content Still missing
+                        </p>
+                        <p><b>Improving data quality and integrity</b></p>
+                        <p>
+                                Content Still missing
+                        </p>
+
+                </div>
+
+        </div>
+
+
+
+</body>
+
+</html>
+{% endblock %}

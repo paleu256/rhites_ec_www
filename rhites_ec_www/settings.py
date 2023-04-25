@@ -23,9 +23,9 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'w5&z#+w&ur=+e_fhjs#xy7ksc5a*y-&g^4gjc8#5via=c5d%&t'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False 
+DEBUG = True 
 
-ALLOWED_HOSTS = ['localhost',]
+ALLOWED_HOSTS = ['localhost','0.0.0.0',]
 
 
 # Application definition
@@ -87,9 +87,9 @@ WSGI_APPLICATION = 'rhites_ec_www.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'somedb',
-        'USER': 'dbuser',
-        'PASSWORD': 'dbpass',
+        'NAME': 'pr',
+        'USER': 'postgres',
+        'PASSWORD': 'mynameis1*',
         'HOST': '127.0.0.1',
         'PORT': '5432',
         'ATOMIC_REQUESTS': True,
@@ -137,7 +137,7 @@ ORG_UNIT_ROOT_NAME = 'Uganda'
 DJANGO_EASY_AUDIT_WATCH_REQUEST_EVENTS = False # don't log HTTP requests
 
 # Timeout period (in seconds)
-INACTIVITY_TIMEOUT = 300
+INACTIVITY_TIMEOUT = 1800
 
 # import local settings
 try:

@@ -1,8 +1,25 @@
 {% extends "startmin/base.html" %} 
-{% block title %}RHITES-EC Performance Monitoring Tool-Reports{% endblock %} 
+{% block title %}UHA Performance Monitoring Tool-Reports{% endblock %} 
 {% block content %}
 
 <style>
+
+	.collapsibleone {
+		background-color: white;
+		color: white;
+		cursor: pointer;
+		padding: 2px;
+		width: 50%;
+		border: none;
+		text-align: left;
+		outline: none;
+		font-size: 15px;
+		color: #0000EE;
+	}
+
+	.collapsibleone:hover {
+		background-color: #f1f5f7;
+	}
 	.content {
 		padding: 0 18px;
 		display: none;
@@ -28,14 +45,29 @@
 	}
 </style>
 
-<h4>Performance summary report</h4>
+<h4>Annual Performance summary report</h4>
 
 <ul>
 	<li>
-		<a href="{% url 'reports_sites_2016_to_2017' %}">FY Oct 2016 – Sept 2017</a>
+		<a href="{% url 'reports_sites_2020_to_2021' %}">FY Oct 2020 – Sept 2021</a>
 	</li>
-	<li>
-		<a href="{% url 'reports_sites_2017_to_2018' %}">FY Oct 2017 – Sept 2018</a>
-	</li>
+
 </ul>
+
+<script>
+	var coll = document.getElementsByClassName("collapsibleone");
+	var i;
+
+	for (i = 0; i < coll.length; i++) {
+		coll[i].addEventListener("click", function () {
+			this.classList.toggle("active");
+			var content = this.nextElementSibling;
+			if (content.style.display === "block") {
+				content.style.display = "none";
+			} else {
+				content.style.display = "block";
+			}
+		});
+	}
+</script> 
 {% endblock %}
