@@ -5,6 +5,7 @@ from django.core.files.storage import FileSystemStorage
 from django.core.exceptions import ValidationError
 from django.conf import settings
 from .enums import Where_Identified_CHOICES
+from django.db.models.deletion import CASCADE
 
 import logging
 logger = logging.getLogger(__name__)
@@ -1296,9 +1297,50 @@ class IFASBottleneck(models.Model):
     additional_bottleneck_identified=models.CharField("Additional bottleneck identified during efforts",max_length=500)
     comments=models.CharField("Comments if any",max_length=500)
 
+ #gbv district facility model
+GbvQaTool_Choices=[
+    ("None","None"),
+    ("No","No"),
+    ("Yes","Yes"),
+]
+
+class region(models.Model):
+    name=models.CharField(max_length=32)
+
+    def __str__(self):
+        return self.name
     
+class district(models.Model):
+    roid=models.ForeignKey(region,on_delete=CASCADE,related_name='district')
+    name=models.CharField(max_length=32)
 
+    def __str__(self):
+        return self.name
 
+class health_facility(models.Model):
+    doid=models.ForeignKey(district,on_delete=CASCADE,related_name='healthfacility')
+    name=models.CharField(max_length=32)
+
+    def __str__(self):
+        return self.name
+
+class health_subcounty(models.Model):
+    hfoid=models.ForeignKey(health_facility,on_delete=CASCADE,related_name='subcounty')
+    name=models.CharField(max_length=32)
+
+    def __str__(self):
+        return self.name
+
+class gbvTool(models.Model):
+    roid=models.ForeignKey(region,on_delete=CASCADE)
+    doid=models.ForeignKey(district,on_delete=CASCADE)
+    hfoid=models.ForeignKey(health_facility,on_delete=CASCADE)
+    reporting_period=models.DateField("Reporting Period",auto_now_add=True)
+    fd1_2=models.CharField("1.2 Facility offers GBV care without requiring GBV patients to report to the police",max_length=4,choices=GbvQaTool_Choices,default=None)
+    fd1_4=models.CharField("1.4 Facility maintains patient privacy during triage/intake process",max_length=4,choices=GbvQaTool_Choices,default=None)
+
+    def is_upperclass(self):
+        return self.__class__.__name__
     
 
 

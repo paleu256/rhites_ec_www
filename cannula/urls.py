@@ -13,6 +13,18 @@ urlpatterns = [
     
 
     #data capture tools
+
+    #Demographic Details  
+    url(r'urc/uha/de/demo-district/form\.asp.Net', views.getdemodistrict, name='getdemodistrict'),
+    url(r'urc/uha/de/demo-healthfacility/form\.asp.Net', views.getdemohealthfacility, name='getdemohealthfacility'),
+    url(r'urc/uha/de/demo-subcounty/form\.asp.Net', views.getdemosubcounty, name='getdemosubcounty'),
+    
+    
+    
+    #GBV
+    url(r'uha/gbv/da/form\.asp.Net', views.getdbv_qa_data, name='getdbv_qa_data'),
+     
+
     url(r'uha/gbv/qa/datacapture\.php', views.de_gbv_qaa_tool, name='de_gbv_qaa_tool'),
     url(r'uha/gbv/qa/viewdashboard\.php', views.dashboard_GbvQaaTool, name='dashboard_gbvqaatool'),
    

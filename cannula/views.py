@@ -17,10 +17,14 @@ import openpyxl
 from . import dateutil, grabbag
 from .grabbag import default_zero, default, sum_zero, all_not_none, grouper
 
-from .models import IFASBottleneck,pmtcteid_dashboard,pmtcteid,pmtcteid_targets,DOOS,mnchandmal,RMNCHAndMalaria,Lab,LabTargets,Lab_Scorecard,TbPrevTargets,TbPrev_Scorecard,TbPrev,DataElement, OrgUnit, DataValue, ValidationRule, SourceDocument, ou_dict_from_path, ou_path_from_dict
+from .models import region,district,health_facility,health_subcounty,IFASBottleneck,pmtcteid_dashboard,pmtcteid,pmtcteid_targets,DOOS,mnchandmal,RMNCHAndMalaria,Lab,LabTargets,Lab_Scorecard,TbPrevTargets,TbPrev_Scorecard,TbPrev,DataElement, OrgUnit, DataValue, ValidationRule, SourceDocument, ou_dict_from_path, ou_path_from_dict
 from .forms import SourceDocumentForm, DataElementAliasForm, UserProfileForm,BottleneckInventory
 
 from .dashboards import LegendSet
+
+import logging
+
+logger =logging.getLogger(__name__)
 
 def home(request):
     context = {
@@ -81,6 +85,66 @@ def de_gbv_qaa_tool(request):
 
 def dashboard_GbvQaaTool(request):
     return render(request, 'cannula/dashboard_gbvqaatool.html')
+
+#GBV LOGIC
+def getdbv_qa_data(request):
+    logger.error("in get gbvqaatool")
+    template_name = 'cannula/gbvqaTool.html'
+    region1 = region.objects.all()
+    
+    return render(request,template_name,{'region':region1})
+
+
+def getdemodistrict(request):
+    template_name = 'partials/district.html'
+
+    if 'region' in request.GET:
+        region_id=request.GET.get('region')  
+        d=district.objects.filter(roid_id=region_id)
+        context={'district':d}
+
+        logger.error("am demo districttttttttttttttttttttttt")
+        return render(request,template_name,context)
+    else:
+        logger.error("Retunn a toast to the user")
+
+def getdemohealthfacility(request):
+    template_name = 'partials/healthfacility.html'
+
+    if 'district' in request.GET:
+        district_id=request.GET.get('district')  
+        healthFacility=health_facility.objects.filter(doid_id=district_id)
+        context={'health_facility':healthFacility}
+
+        logger.error("am demo health_facilitttttttt")
+        return render(request,template_name,context)
+    else:
+        logger.error("Retunn a toast to the user")
+
+def getdemosubcounty(request):
+    template_name = 'partials/subcounty.html'
+
+    if 'health_facility' in request.GET:
+        health_facility_id=request.GET.get('health_facility')  
+        healthSubcounty=health_subcounty.objects.filter(hfoid_id=health_facility_id)
+        context={'subcounty':healthSubcounty}
+
+        logger.error("am demo subcontyyyyyyyyyyy")
+        return render(request,template_name,context)
+    else:
+        logger.error("Retunn a toast to the user")
+       
+
+
+
+
+
+
+
+
+
+
+
 
 
 #to be removed

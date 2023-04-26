@@ -18,7 +18,11 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="description" content="">
         <meta name="author" content="">
-        <title>{% block title %}UHA Data Validation Tool{% endblock %}</title>
+        <title>
+        {% block title %}
+            UHA Data Validation Tool
+        {% endblock %}
+        </title>
 
         {% block old-styles %}{% endblock %}
         <!-- Bootstrap Core CSS -->
@@ -84,7 +88,12 @@
         <!-- Custom Theme JavaScript -->
         <script src="{% static 'startmin/js/startmin.js' %}"></script>
 
-        {% block extra-js %}{% endblock %}
+        <!--HTMX-->
+        <script src="https://unpkg.com/htmx.org@1.6.0"></script>
+
+        {% block extra-js %}
+         
+        {% endblock %}
 
     </body>
 </html>
