@@ -1,7 +1,7 @@
 from django.forms import ModelForm
 from django.contrib.auth.models import User
 from django import forms
-from .models import IFASBottleneck
+from .models import IFASBottleneck,gbvTool,GbvQaTool_Choices, gbvTool2
 from .enums import Where_Identified_CHOICES
 
 from . import models
@@ -46,3 +46,56 @@ class BottleneckInventory(forms.ModelForm):
         data=self.cleaned_data['bottleneck']
         #some ifs to do some cleaning
         return data
+    
+GbvQaTool_Form_Choices=[
+    ("None","None"),
+    ("No","No"),
+    ("Yes","Yes"),
+]
+
+Year_Form_Choices=[
+    ("None","None"),
+    ("No","No"),
+    ("Yes","Yes"),
+]
+
+class GBVQaForm(forms.ModelForm):
+    reporting_period = forms.DateField(label='Reporting Period',input_formats=['%d/%m/%Y'],required=True)
+    
+    class Meta:
+        model=gbvTool
+        exclude = ('roid','doid','hfoid', )
+        fields=['reporting_period','fd1_1','fd1_2','fd1_3','fd1_4']
+       
+        widgets={
+             'reporting_period':forms.DateInput(attrs={'type':'date', 'placeholder':'yyyy-mm-dd (DOB)','class':'form-control'}),
+             #'fd1_2':forms.CharField(choices=GbvQaTool_Form_Choices,required=True),
+             #'fd1_4':forms.CharField(attrs={'class','form-control'})
+            
+             
+        }
+
+    def clean_GBVQaTool(self):
+        data=self.cleaned_data['gbvTool']
+        
+        #some ifs to do some cleaning
+        return data
+
+class GBVQaForm2(forms.ModelForm):
+    reporting_period2 = forms.DateField(label='Reporting Period',input_formats=['%d/%m/%Y'],required=True)
+    
+    class Meta:
+        model=gbvTool2
+        fields=['reporting_period2','efforts_to_address_bottleneck','next_steps','additional_bottleneck_identified','comments']
+       
+        widgets={
+             'reporting_period2':forms.DateInput(attrs={'type':'date', 'placeholder':'yyyy-mm-dd (DOB)','class':'form-control'}),
+        }
+
+    def clean_GBVQaTool(self):
+        data=self.cleaned_data['gbvTool']
+        
+        #some ifs to do some cleaning
+        return data
+    
+   

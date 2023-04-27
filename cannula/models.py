@@ -1336,9 +1336,23 @@ class gbvTool(models.Model):
     doid=models.ForeignKey(district,on_delete=CASCADE)
     hfoid=models.ForeignKey(health_facility,on_delete=CASCADE)
     reporting_period=models.DateField("Reporting Period",auto_now_add=True)
+    fd1_1=models.CharField("1.1 Facility offers essential GBV care  24 hours a day OR facility helps patients to access alternative facilities that provide essential care during off-hours",max_length=4,choices=GbvQaTool_Choices,default=None)
     fd1_2=models.CharField("1.2 Facility offers GBV care without requiring GBV patients to report to the police",max_length=4,choices=GbvQaTool_Choices,default=None)
+    fd1_3=models.CharField("1.3 Facility keeps a copy of the History and examination form. Patients are  examined and treated with or without Police Form. Ask to see the form.",max_length=4,choices=GbvQaTool_Choices,default=None)
     fd1_4=models.CharField("1.4 Facility maintains patient privacy during triage/intake process",max_length=4,choices=GbvQaTool_Choices,default=None)
-
+    
+    #fd1_3=models.CharField("",max_length=4,choices=GbvQaTool_Choices,default=None)
+    def is_upperclass(self):
+        return self.__class__.__name__
+    
+class gbvTool2(models.Model):
+    reporting_period2 = models.DateField("Reporting Period",auto_now_add=True)
+    efforts_to_address_bottleneck=models.CharField("Efforts to address the bottleneck",max_length=4,choices=GbvQaTool_Choices,default=None)
+    next_steps=models.CharField("Next steps",max_length=4,choices=GbvQaTool_Choices,default=None)
+    additional_bottleneck_identified=models.CharField("Additional bottleneck identified during efforts",max_length=4,choices=GbvQaTool_Choices,default=None)
+    comments=models.CharField("Comments if any",max_length=4,choices=GbvQaTool_Choices,default=None)
+    
+    #fd1_3=models.CharField("",max_length=4,choices=GbvQaTool_Choices,default=None)
     def is_upperclass(self):
         return self.__class__.__name__
     

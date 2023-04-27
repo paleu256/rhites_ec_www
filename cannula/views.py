@@ -18,7 +18,7 @@ from . import dateutil, grabbag
 from .grabbag import default_zero, default, sum_zero, all_not_none, grouper
 
 from .models import region,district,health_facility,health_subcounty,IFASBottleneck,pmtcteid_dashboard,pmtcteid,pmtcteid_targets,DOOS,mnchandmal,RMNCHAndMalaria,Lab,LabTargets,Lab_Scorecard,TbPrevTargets,TbPrev_Scorecard,TbPrev,DataElement, OrgUnit, DataValue, ValidationRule, SourceDocument, ou_dict_from_path, ou_path_from_dict
-from .forms import SourceDocumentForm, DataElementAliasForm, UserProfileForm,BottleneckInventory
+from .forms import GBVQaForm2, SourceDocumentForm, DataElementAliasForm, UserProfileForm,BottleneckInventory,GBVQaForm
 
 from .dashboards import LegendSet
 
@@ -86,6 +86,9 @@ def de_gbv_qaa_tool(request):
 def dashboard_GbvQaaTool(request):
     return render(request, 'cannula/dashboard_gbvqaatool.html')
 
+def testsplitform(request):
+    return render(request, 'dataforms/gbvsplitform.html')
+
 #GBV LOGIC
 def getdbv_qa_data(request):
     logger.error("in get gbvqaatool")
@@ -134,7 +137,34 @@ def getdemosubcounty(request):
     else:
         logger.error("Retunn a toast to the user")
        
+def postgbvqaData(request):
+    template_name = 'dataforms/gbvForm.html'
+    #data need on the form
+    region1 = region.objects.all()
+    logger.error("am1 post hhhhhhhhhhhhhh:")
 
+    if request.method == 'POST':
+        gbvForm = GBVQaForm(request.POST)
+        gbvForm2 = GBVQaForm2(request.POST)
+        
+        
+        gbvForm.roid = request.POST.get('region') 
+        gbvForm.doid = request.POST.get('district')
+        gbvForm.hfoid = request.POST.get('district')
+        
+        logger.error("am1 post region:"+gbvForm.roid)
+        logger.error("am1 post district:"+gbvForm.doid)
+        logger.error("am1 post facility:"+gbvForm.hfoid)
+        
+        if gbvForm.is_valid():
+            gbv=gbvForm.save(commit=False)
+            gbv2=gbvForm2.save(commit=False)
+
+    gbvForm = GBVQaForm()
+    gbvForm2 = GBVQaForm2()
+
+    context={'form':gbvForm,'gbvForm2':gbvForm2,'region':region1}
+    return render(request,template_name,context)
 
 
 

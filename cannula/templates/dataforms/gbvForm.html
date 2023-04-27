@@ -1,0 +1,82 @@
+{% extends "startmin/base.html" %} 
+
+{% block title %} GBV Data Entry{% endblock %} 
+{% block heading %}
+
+    <div class="form-group"> 
+        <h1> GBV Data Entry Form</h1>      
+    </div> 
+
+{% endblock %} 
+
+
+{% block content %}
+
+<div class="column is-one-third">
+    <form method="post">
+
+        <select class="custom-select" 
+            name="region" 
+                hx-get="{% url 'getdemodistrict' %}" 
+                 hx-trigger="change" 
+                     hx-target="#district">
+        
+            <option selected>Select Your Region</option>  
+            {% for item in region  %}
+            <option value="{{ item.id }}">{{ item.name }}</option>
+            {% endfor %}
+        </select>
+    <br/>
+
+    <div id='district' class="my-4">
+        {% include 'partials/district.html' %}
+    </div>
+    <br/>
+
+    <div id='healthfacility' class="my-4">
+        {% include 'partials/healthfacility.html' %}
+    </div>
+    <br/>
+
+    <div id='healthfacility' class="my-4">
+        
+        <label for="cars">Choose a car:</label>
+        <select id="cars" name="carlist" form="carform">
+            <option value="volvo">Volvo</option>
+            <option value="saab">Saab</option>
+            <option value="opel">Opel</option>
+            <option value="audi">Audi</option>
+        </select>
+<br/> <br/>
+        <label for="ck">Choose a ck:</label>
+        <select id="ck" name="carlist1" form="carform1">
+            <option value="volvo">Volvo</option>
+            <option value="saab">Saab</option>
+           
+        </select>
+
+    </div>
+    <br/>
+
+        {% csrf_token %}
+        <div class="form-group">
+
+        <!--Use the nomal html for-->
+            {{ form.as_p }}
+        </div>
+       
+        <p>Another Form spliting----------------------------------</p>
+        <div class="form-group">
+
+            <!--Use the nomal html for-->
+                {{ gbvForm2.as_p }}
+            </div>
+
+        
+        <div class="form-group">
+            <button class="button is-success is-fullwidth is-medium mt-5" type="submit" style="text-align: center;">Submit</button>
+       </div>
+    </form>
+</div>
+
+{% endblock content %}

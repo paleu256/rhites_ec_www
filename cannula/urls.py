@@ -12,7 +12,11 @@ urlpatterns = [
     url(r'scorecards/reports/reports_sites_2020_to_2021\.php', views.reports_sites_2020_to_2021, name='reports_sites_2020_to_2021'),
     
 
-    #data capture tools
+    #TESTING HOW STAFF WORKS
+    #SPLIT FORM
+    url(r'urc/testdataform/split/demo/gbv\.asp.net', views.testsplitform, name='testsplitform'),
+
+    #DATA CAPTURE TOOLS
 
     #Demographic Details  
     url(r'urc/uha/de/demo-district/form\.asp.Net', views.getdemodistrict, name='getdemodistrict'),
@@ -23,6 +27,7 @@ urlpatterns = [
     
     #GBV
     url(r'uha/gbv/da/form\.asp.Net', views.getdbv_qa_data, name='getdbv_qa_data'),
+    url(r'uha/gbv/da/new/update/gbvqa/form\.asp.Net', views.postgbvqaData, name='postgbvqaData'),
      
 
     url(r'uha/gbv/qa/datacapture\.php', views.de_gbv_qaa_tool, name='de_gbv_qaa_tool'),
