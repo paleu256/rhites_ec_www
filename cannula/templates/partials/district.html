@@ -1,0 +1,14 @@
+
+<select class="custom-select" name="district" 
+    hx-get="{% url 'getdemohealthfacility' %}" 
+    hx-trigger="change" 
+    hx-target="#healthfacility">
+    
+
+    <option selected>Choose your District</option>  
+   
+    {% for item in district  %}
+        <option value="{{ item.id }}">{{ item.name }}</option>
+    {% endfor %}
+
+</select>

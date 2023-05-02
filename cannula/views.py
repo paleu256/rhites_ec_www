@@ -17,10 +17,14 @@ import openpyxl
 from . import dateutil, grabbag
 from .grabbag import default_zero, default, sum_zero, all_not_none, grouper
 
-from .models import IFASBottleneck,pmtcteid_dashboard,pmtcteid,pmtcteid_targets,DOOS,mnchandmal,RMNCHAndMalaria,Lab,LabTargets,Lab_Scorecard,TbPrevTargets,TbPrev_Scorecard,TbPrev,DataElement, OrgUnit, DataValue, ValidationRule, SourceDocument, ou_dict_from_path, ou_path_from_dict
-from .forms import SourceDocumentForm, DataElementAliasForm, UserProfileForm,BottleneckInventory
+from .models import region,district,health_facility,health_subcounty,IFASBottleneck,pmtcteid_dashboard,pmtcteid,pmtcteid_targets,DOOS,mnchandmal,RMNCHAndMalaria,Lab,LabTargets,Lab_Scorecard,TbPrevTargets,TbPrev_Scorecard,TbPrev,DataElement, OrgUnit, DataValue, ValidationRule, SourceDocument, ou_dict_from_path, ou_path_from_dict
+from .forms import GBVQaForm2, SourceDocumentForm, DataElementAliasForm, UserProfileForm,BottleneckInventory,GBVQaForm
 
 from .dashboards import LegendSet
+
+import logging
+
+logger =logging.getLogger(__name__)
 
 def home(request):
     context = {
@@ -71,9 +75,17 @@ def user_profile_edit(request):
 def indexreport(request):
     return render(request, 'cannula/index_reports.html')
 
+#Quarterly Section
 @login_required
-def reports_sites_2020_to_2021(request):
-    return render(request, 'cannula/performance_summary_oct_2020–sep_2021.html')
+def q_reports_sites_2022_to_2023(request):
+    return render(request, 'cannula/q_reports_sites_2022_to_2023.html')
+
+#Annaly Section
+@login_required
+def reports_sites_2022_to_2023(request):
+    return render(request, 'cannula/performance_summary_oct_2022–sep_2023.html')
+
+
 
 @login_required
 def de_gbv_qaa_tool(request):
@@ -81,6 +93,96 @@ def de_gbv_qaa_tool(request):
 
 def dashboard_GbvQaaTool(request):
     return render(request, 'cannula/dashboard_gbvqaatool.html')
+
+def testsplitform(request):
+    return render(request, 'dataforms/gbvsplitform.html')
+
+#GBV LOGIC
+def getdbv_qa_data(request):
+    logger.error("in get gbvqaatool")
+    template_name = 'cannula/gbvqaTool.html'
+    region1 = region.objects.all()
+    
+    return render(request,template_name,{'region':region1})
+
+
+def getdemodistrict(request):
+    template_name = 'partials/district.html'
+
+    if 'region' in request.GET:
+        region_id=request.GET.get('region')  
+        d=district.objects.filter(roid_id=region_id)
+        context={'district':d}
+
+        logger.error("am demo districttttttttttttttttttttttt")
+        return render(request,template_name,context)
+    else:
+        logger.error("Retunn a toast to the user")
+
+def getdemohealthfacility(request):
+    template_name = 'partials/healthfacility.html'
+
+    if 'district' in request.GET:
+        district_id=request.GET.get('district')  
+        healthFacility=health_facility.objects.filter(doid_id=district_id)
+        context={'health_facility':healthFacility}
+
+        logger.error("am demo health_facilitttttttt")
+        return render(request,template_name,context)
+    else:
+        logger.error("Retunn a toast to the user")
+
+def getdemosubcounty(request):
+    template_name = 'partials/subcounty.html'
+
+    if 'health_facility' in request.GET:
+        health_facility_id=request.GET.get('health_facility')  
+        healthSubcounty=health_subcounty.objects.filter(hfoid_id=health_facility_id)
+        context={'subcounty':healthSubcounty}
+
+        logger.error("am demo subcontyyyyyyyyyyy")
+        return render(request,template_name,context)
+    else:
+        logger.error("Retunn a toast to the user")
+       
+def postgbvqaData(request):
+    template_name = 'dataforms/gbvForm.html'
+    #data need on the form
+    region1 = region.objects.all()
+    logger.error("am1 post hhhhhhhhhhhhhh:")
+
+    if request.method == 'POST':
+        gbvForm = GBVQaForm(request.POST)
+        gbvForm2 = GBVQaForm2(request.POST)
+        
+        
+        gbvForm.roid = request.POST.get('region') 
+        gbvForm.doid = request.POST.get('district')
+        gbvForm.hfoid = request.POST.get('district')
+        
+        logger.error("am1 post region:"+gbvForm.roid)
+        logger.error("am1 post district:"+gbvForm.doid)
+        logger.error("am1 post facility:"+gbvForm.hfoid)
+        
+        if gbvForm.is_valid():
+            gbv=gbvForm.save(commit=False)
+            gbv2=gbvForm2.save(commit=False)
+
+    gbvForm = GBVQaForm()
+    gbvForm2 = GBVQaForm2()
+
+    context={'form':gbvForm,'gbvForm2':gbvForm2,'region':region1}
+    return render(request,template_name,context)
+
+
+
+
+
+
+
+
+
+
 
 
 #to be removed

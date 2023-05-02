@@ -1,0 +1,49 @@
+{% extends "startmin/base.html" %} 
+
+{% block title %} GBV tool {% endblock %} 
+{% block heading %}
+
+    <div class="form-group"> 
+        <h1> GBV Records</h1>      
+    </div> 
+
+{% endblock %} 
+
+
+{% block content %}
+
+<div class="col-md-4" style="background-color: aliceblue">
+    <select class="custom-select" 
+        name="region" 
+            hx-get="{% url 'getdemodistrict' %}" 
+                hx-trigger="change" 
+                    hx-target="#district">
+        
+        <option selected>Select Your Region</option>  
+        {% for item in region  %}
+        <option value="{{ item.id }}">{{ item.name }} {{ item.id }}</option>
+        {% endfor %}
+    </select>
+    <br/>
+ 
+        <div id='district' class="my-4">
+            {% include 'partials/district.html' %}
+        </div>
+    <br/>
+
+    <div id='healthfacility' class="my-4">
+        {% include 'partials/healthfacility.html' %}
+    </div>
+    <br/>
+
+    <div id='subcounty' class="my-4">
+        {% include 'partials/subcounty.html' %}
+    </div>
+    <br/>
+
+</div>
+    
+{% endblock %}
+
+
+    
