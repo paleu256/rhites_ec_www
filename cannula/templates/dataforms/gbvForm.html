@@ -1,21 +1,206 @@
 {% extends "startmin/base.html" %} 
 
-{% block title %} GBV Data Entry{% endblock %} 
-{% block heading %}
+{% load static %}
 
+{% block title %} GBV Data Entry {% endblock %} 
+
+{% block heading %}
     <div class="form-group"> 
-        <h1> GBV Data Entry Form</h1>      
+        <h1> Gender-Based Violence Quality Assurance Assessment Tool</h1>      
     </div> 
 
 {% endblock %} 
 
 
 {% block content %}
+<style>
+:root {
+    --prmary-color: rgb(11,78,179)
+}
+::before,
+::after {
+    box-sizing: border-box;
+}
 
-<div class="column is-one-third">
-    <form method="post">
+label {
+    display: block;
+    margin-bottom: 0.5rem;
+}
 
-        <select class="custom-select" 
+input {
+    display: block;
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #ccc;
+    border-radius: 0.25rem;
+}
+
+.width-50{
+    width: 30%;
+}
+
+.ml-auto {
+    margin-left: auto;
+}
+
+/* progress bar */
+.progressbar {
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    counter-reset: step;
+    margin: 1rem 0 3rem;
+   
+}
+
+.progressbar::before, .progress {
+    content: "";
+    position: absolute;
+    top:50%;
+    transform: translateY(-50%);
+    height: 4px;
+    width: 100%;
+    background-color: #dcdcdc;
+    z-index: 0;
+}
+
+.progress {
+    background-color: var(--prmary-color);
+    width: 0%;
+    transition: 0.3s;
+
+}
+
+.progress-step {
+    width: 35px;
+    height: 35px;
+    background-color: #dcdcdc;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.progress-step::before {
+   counter-increment: step;
+   /* un comment this to add numbers*/
+   content: counter(step);
+}
+
+.progress-step::after {
+   content: attr(data-tittle);
+   position: absolute;
+   top: calc(100% + 0.5rem);
+   font-size: 0.85rem;
+   color: #666;
+   
+}
+
+.progress-step-active {
+    background-color: var(--prmary-color);
+    color: #f3f3f3;    
+}
+
+
+body1 {
+    font-family: Montserrat,'Segoe UI', Tahoma, 'Geneva', 'Verdana', sans-serif;
+    margin: 10;
+    display: grid;
+    place-items: left;
+    min-height: 10vh;
+}
+
+.form {
+    width: clamp(920px,700%,1030px);
+    margin: 0 auto;
+    border: 1px solid #ccc;
+    border-radius: 0.35rem;
+    padding: 1.5rem;
+}
+
+.form-step {
+ display: none;
+ transform-origin: top;
+ animation: animate 0.5s;
+}
+
+.form-step-active {
+    display: block;
+
+}
+
+.input-group {
+    margin: 2rem 0;
+}
+
+
+@keyframes animate {
+    form {
+        transform: scale(1,0);
+        opacity:0;
+    }  
+    to {
+        transform: scale(1,1);
+        opacity: 1;
+    } 
+}
+
+.btn {
+    padding: 0.7rem;
+    display: block;
+    text-decoration: none;
+    background-color: var(--prmary-color);
+    color: #f3f3f3;
+    text-align: center;
+    border-radius: 0.25rem;
+    cursor: pointer;
+    transition: 0.3ms;
+}
+
+.btns-group {
+    display: grid;
+    grid-template-columns: repeat(2,1fr);
+    gap: 1.5rem;
+}
+
+.btn:hover {
+    box-shadow: 0 0 0 2px #fff, 0 0 0 3px var(--prmary-color);
+}
+
+</style>
+
+<body1>
+    <form action="#" class="form" method="post"> 
+    <!--Progress bar-->
+     <div class="progressbar">
+        <div class="progress" id="progress"></div>
+        <div class="progress-step progress-step-active" data-tittle="Introction"></div>
+        <div class="progress-step" data-tittle="Facility Background"></div>
+        <div class="progress-step" data-tittle="SERVICES and INFRASTRUCTURE"></div>
+        <div class="progress-step" data-tittle="step5"></div>
+        <div class="progress-step" data-tittle="step 6"></div>
+        <div class="progress-step" data-tittle="step 7"></div>
+        <div class="progress-step" data-tittle="step 8"></div>
+        <div class="progress-step" data-tittle="step 9"></div>
+     </div>
+
+    <!--Steps Step 1-->
+   <div class="form-step form-step-active">
+        <div class="input-group">  
+
+        <p>INSTRUCTIONAL MANUAL COMMING SOOM ON HOW TO USE THIS TOOL</p>
+
+        </div>
+        <div class="">
+            <a href="#" class="btn btn-next width-50 ml-auto">Next</a>
+        </div>
+    </div>
+
+         <!--Steps Step 2-->
+        <div class="form-step">
+        <div class="input-group">
+
+            <select class="custom-select" 
             name="region" 
                 hx-get="{% url 'getdemodistrict' %}" 
                  hx-trigger="change" 
@@ -26,57 +211,156 @@
             <option value="{{ item.id }}">{{ item.name }}</option>
             {% endfor %}
         </select>
-    <br/>
 
-    <div id='district' class="my-4">
-        {% include 'partials/district.html' %}
-    </div>
-    <br/>
+        </div>
 
-    <div id='healthfacility' class="my-4">
-        {% include 'partials/healthfacility.html' %}
-    </div>
-    <br/>
+        <div class="input-group" id='district'>
+            {% include 'partials/district.html' %}
+        </div>
 
-    <div id='healthfacility' class="my-4">
-        
-        <label for="cars">Choose a car:</label>
-        <select id="cars" name="carlist" form="carform">
-            <option value="volvo">Volvo</option>
-            <option value="saab">Saab</option>
-            <option value="opel">Opel</option>
-            <option value="audi">Audi</option>
-        </select>
-<br/> <br/>
-        <label for="ck">Choose a ck:</label>
-        <select id="ck" name="carlist1" form="carform1">
-            <option value="volvo">Volvo</option>
-            <option value="saab">Saab</option>
-           
-        </select>
+        <div class="input-group" id='healthfacility'>
 
-    </div>
-    <br/>
+            {% include 'partials/healthfacility.html' %}
+
+        </div>
 
         {% csrf_token %}
-        <div class="form-group">
+        
+        <div class="btns-group">
+            <a href="#" class="btn btn-prev">Previous</a>
+            <a href="#" class="btn btn-next">Next</a>
+        </div>
+    </div>
 
-        <!--Use the nomal html for-->
+          <!--Steps Step MORE 1-->
+         <div class="form-step">
+         <div class="input-group">
+            {% csrf_token %}
             {{ form.as_p }}
         </div>
-       
-        <p>Another Form spliting----------------------------------</p>
-        <div class="form-group">
 
-            <!--Use the nomal html for-->
-                {{ gbvForm2.as_p }}
-            </div>
+        <div class="btns-group">
+            <a href="#" class="btn btn-prev">Previous</a>
+            <a href="#" class="btn btn-next">Next</a>
+        </div>
+    </div>
 
-        
-        <div class="form-group">
-            <button class="button is-success is-fullwidth is-medium mt-5" type="submit" style="text-align: center;">Submit</button>
+     <!--Steps Step MORE 1-->
+     <div class="form-step">
+        <div class="input-group">
+          <P>CONTENT HERE 1</P>
        </div>
-    </form>
-</div>
 
-{% endblock content %}
+       <div class="btns-group">
+           <a href="#" class="btn btn-prev">Previous</a>
+           <a href="#" class="btn btn-next">Next</a>
+       </div>
+   </div>
+
+   <div class="form-step">
+   <div class="input-group">
+    <P>CONTENT HERE 2</P>
+   </div>
+
+   <div class="btns-group">
+       <a href="#" class="btn btn-prev">Previous</a>
+       <a href="#" class="btn btn-next">Next</a>
+   </div>
+   </div>
+
+   <div class="form-step">
+    <div class="input-group">
+     <P>CONTENT HERE 3</P>
+    </div>
+ 
+    <div class="btns-group">
+        <a href="#" class="btn btn-prev">Previous</a>
+        <a href="#" class="btn btn-next">Next</a>
+    </div>
+    </div>
+
+    <div class="form-step">
+        <div class="input-group">
+         <P>CONTENT HERE 4</P>
+        </div>
+     
+        <div class="btns-group">
+            <a href="#" class="btn btn-prev">Previous</a>
+            <a href="#" class="btn btn-next">Next</a>
+        </div>
+        </div>
+
+     <!--Steps Step 4-last step-->
+        <div class="form-step">
+        
+         <div class="input-group">
+           <p>THIS IS THE LAST PAGE FOR TOOL</p>
+        </div>
+        
+        <div class="btns-group">
+            <a href="#" class="btn btn-prev">Previous</a>
+            <input type="submit" class="btn" value="Submit">
+        </div>
+    </div>
+
+   </div>
+
+    </form>
+</body1>
+
+<script src="{% static 'jacob.js' %}"></script>
+<script src="{% static 'wj.js' %}"></script>
+
+<script>
+    const prevBtns = document.querySelectorAll(".btn-prev");
+    const nextBtns = document.querySelectorAll(".btn-next");
+    const progress = document.getElementById("progress");
+    const formSteps = document.querySelectorAll(".form-step");
+    const progressSteps = document.querySelectorAll(".progress-step");  
+    
+    
+    let fStemsNumber = 0;
+      
+    nextBtns.forEach(btn=> {
+        btn.addEventListener("click", ()=>{
+            fStemsNumber++;
+            updateFormSteps();
+            updateprogressbar();
+        });
+    });
+
+    prevBtns.forEach(btn=> {
+        btn.addEventListener("click", ()=>{
+            fStemsNumber--;
+            updateFormSteps();
+            updateprogressbar();
+        });
+    });
+      
+    function  updateFormSteps(){
+        formSteps.forEach(fStep => {
+            fStep.classList.contains("form-step-active") && fStep.classList.remove("form-step-active");
+        });
+
+        formSteps[fStemsNumber].classList.add("form-step-active")
+    }	
+
+    function  updateprogressbar(){
+        progressSteps.forEach((progressStep,idx)=>{
+            if(idx <fStemsNumber +1){
+                progressStep.classList.add('progress-step-active');
+            }else{
+                progressStep.classList.remove('progress-step-active');
+            }
+        });
+
+        const progressActive =document.querySelectorAll(".progress-step-active")
+        progress.style.width =((progressActive.length -1)/(progressSteps.length - 1))*100+ "%";
+
+        }
+
+    </script>
+
+
+
+{% endblock %}

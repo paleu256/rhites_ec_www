@@ -65,7 +65,9 @@ class GBVQaForm(forms.ModelForm):
     class Meta:
         model=gbvTool
         exclude = ('roid','doid','hfoid', )
-        fields=['reporting_period','fd1_1','fd1_2','fd1_3','fd1_4']
+        fields=['reporting_period','fd1_1','fd1_2','fd1_3','fd1_4',
+                'fd1_5','fd1_6','fd1_7','fd1_8','fd1_9','fd1_10','fd1_11','fd1_12','fd1_13','fd1_14',
+                'fd1_15','fd1_16','fd1_17','fd1_18','fd1_19','fd1_20','fd1_21','fd1_22','fd1_23','fd1_24','fd1_25',]
        
         widgets={
              'reporting_period':forms.DateInput(attrs={'type':'date', 'placeholder':'yyyy-mm-dd (DOB)','class':'form-control'}),
@@ -86,7 +88,7 @@ class GBVQaForm2(forms.ModelForm):
     
     class Meta:
         model=gbvTool2
-        fields=['reporting_period2','efforts_to_address_bottleneck','next_steps','additional_bottleneck_identified','comments']
+        fields=['reporting_period2',]
        
         widgets={
              'reporting_period2':forms.DateInput(attrs={'type':'date', 'placeholder':'yyyy-mm-dd (DOB)','class':'form-control'}),
