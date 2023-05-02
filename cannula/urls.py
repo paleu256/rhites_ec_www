@@ -7,10 +7,14 @@ urlpatterns = [
     url(r'^home/', views.home, name='home'),
     url(r'^user_profile_edit$', views.user_profile_edit, name='user_profile_edit'),
   
-    #reports
+    #REPORTS
     url(r'dashboards/reports/$', views.indexreport, name='performance_reports'),
-    url(r'scorecards/reports/reports_sites_2020_to_2021\.php', views.reports_sites_2020_to_2021, name='reports_sites_2020_to_2021'),
     
+    #Quaterly section 
+    url(r'scorecards/reports/quater/q_reports_sites_2022_to_2023\.asp.Net', views.q_reports_sites_2022_to_2023, name='q_reports_sites_2022_to_2023'),
+    
+    #Yearly section
+    url(r'scorecards/reports/annual/reports_sites_2022_to_2023\.asp.Net', views.reports_sites_2022_to_2023, name='reports_sites_2022_to_2023'),
 
     #TESTING HOW STAFF WORKS
     #SPLIT FORM

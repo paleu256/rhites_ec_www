@@ -75,9 +75,17 @@ def user_profile_edit(request):
 def indexreport(request):
     return render(request, 'cannula/index_reports.html')
 
+#Quarterly Section
 @login_required
-def reports_sites_2020_to_2021(request):
-    return render(request, 'cannula/performance_summary_oct_2020–sep_2021.html')
+def q_reports_sites_2022_to_2023(request):
+    return render(request, 'cannula/q_reports_sites_2022_to_2023.html')
+
+#Annaly Section
+@login_required
+def reports_sites_2022_to_2023(request):
+    return render(request, 'cannula/performance_summary_oct_2022–sep_2023.html')
+
+
 
 @login_required
 def de_gbv_qaa_tool(request):

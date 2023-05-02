@@ -51,6 +51,8 @@
             <li>
                 <a href="{% url 'index' %}"><i class="fa fa-table fa-fw"></i> Data Capture/Entry <span class="fa arrow"></span></a>
                 <ul class="nav nav-second-level">
+                    
+                    <!--
                     <li>
                         <a href="{% url 'de_gbv_qaa_tool' %}"><b>GBV QAA Tool</b></a>
                     </li>    
@@ -58,18 +60,15 @@
                     <li>
                         <a href="{% url 'getdbv_qa_data' %}"><b>GBV Trial</b></a>
                     </li>  
-                    
-                    <li>
-                        <a href="{% url 'postgbvqaData' %}"><b>GBV QA Data Entry</b></a>
-
-                    </li>  
 
                     <li>
                         <a href="{% url 'testsplitform' %}"><b>Slit Form Test</b></a>
-
                     </li>  
+                    -->
                     
-
+                    <li>
+                        <a href="{% url 'postgbvqaData' %}"><b>GBV QA Data Entry</b></a>
+                    </li>  
                 </ul>
             </li>
             {% endif %}
