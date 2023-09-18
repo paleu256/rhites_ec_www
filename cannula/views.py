@@ -18,7 +18,7 @@ from . import dateutil, grabbag
 from .grabbag import default_zero, default, sum_zero, all_not_none, grouper
 
 from .models import region,district,health_facility,health_subcounty,IFASBottleneck,pmtcteid_dashboard,pmtcteid,pmtcteid_targets,DOOS,mnchandmal,RMNCHAndMalaria,Lab,LabTargets,Lab_Scorecard,TbPrevTargets,TbPrev_Scorecard,TbPrev,DataElement, OrgUnit, DataValue, ValidationRule, SourceDocument, ou_dict_from_path, ou_path_from_dict
-from .forms import GBVQaForm2, SourceDocumentForm, DataElementAliasForm, UserProfileForm,BottleneckInventory,GBVQaForm
+from .forms import GBVQaForm,GBVQaFormB, GBVQaFormC, GBVQaFormD, SourceDocumentForm, DataElementAliasForm, UserProfileForm,BottleneckInventory
 
 from .dashboards import LegendSet
 
@@ -85,7 +85,10 @@ def q_reports_sites_2022_to_2023(request):
 def reports_sites_2022_to_2023(request):
     return render(request, 'cannula/performance_summary_oct_2022–sep_2023.html')
 
-
+#External dasboard.
+@login_required
+def dashboard_external_pfm(request):
+    return render(request, 'cannula/pfm.html')
 
 @login_required
 def de_gbv_qaa_tool(request):
@@ -153,25 +156,59 @@ def postgbvqaData(request):
 
     if request.method == 'POST':
         gbvForm = GBVQaForm(request.POST)
-        gbvForm2 = GBVQaForm2(request.POST)
-        
-        
+        gbvFormB = GBVQaFormB(request.POST)
+        gbvFormC = GBVQaFormC(request.POST)
+        gbvFormD = GBVQaFormD(request.POST)
+
+        #picking values from the form
         gbvForm.roid = request.POST.get('region') 
         gbvForm.doid = request.POST.get('district')
         gbvForm.hfoid = request.POST.get('district')
         
+        #logingin values picked
         logger.error("am1 post region:"+gbvForm.roid)
         logger.error("am1 post district:"+gbvForm.doid)
         logger.error("am1 post facility:"+gbvForm.hfoid)
+
+        logger.error("============gbvForm:"+ gbvForm.data['fd1_1'])
+        logger.error("============gbvFormB:"+ gbvFormB.data['fd1_26'])
+        logger.error("============gbvFormC:"+ gbvFormC.data['fd1_65'])
+        logger.error("============gbvFormD:"+ gbvFormD.data['fd1_107'])
+        
+        #saving value to the database
+        gbvForm.roid_id=3 #gbvForm.roid
+        gbvForm.doid_id=6 #gbvForm.doid
+        gbvForm.hfoid_id=6 #gbvForm.hfoid
+
+        gbvForm.roid_id=gbvForm.roid
+        gbvForm.doid_id=gbvForm.doid
+        gbvForm.hfoid_id=gbvForm.hfoid
+
+        #logger.error("eeeeeeeeeeeeeeeeeeee"+gbvForm.hfoid_id)
         
         if gbvForm.is_valid():
-            gbv=gbvForm.save(commit=False)
-            gbv2=gbvForm2.save(commit=False)
+            #district1=district.objects.filter(doid_id=6)
+            #gbvForm.doid=district1
+            logger.error("form is valid- Regional id:"+ str(gbvForm.doid_id))
+            gbv=gbvForm.save(commit=True)
+        else:
+            print(gbvForm.errors)
+        
+        if gbvFormB.is_valid():
+            gbvb=gbvFormB.save(commit=False)
 
-    gbvForm = GBVQaForm()
-    gbvForm2 = GBVQaForm2()
+        if gbvFormC.is_valid():
+            gbvc=gbvFormC.save(commit=False)
 
-    context={'form':gbvForm,'gbvForm2':gbvForm2,'region':region1}
+        if gbvFormD.is_valid():
+            gbvd=gbvFormD.save(commit=False)
+    else:
+        gbvForm = GBVQaForm()
+        gbvFormB = GBVQaFormB()
+        gbvFormC = GBVQaFormC()
+        gbvFormD = GBVQaFormD()
+
+    context={'form':gbvForm,'gbvFormB':gbvFormB,'gbvFormC':gbvFormC,'gbvFormD':gbvFormD,'region':region1}
     return render(request,template_name,context)
 
 
