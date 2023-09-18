@@ -46,6 +46,17 @@
                     </li>
                 </ul>
             </li>
+
+            <li class="active">
+                <a href="{% url 'index' %}"><i class="fa fa-line-chart fa-fw"></i> Dashboard External <span class="fa arrow"></span></a>
+                <ul class="nav nav-second-level">
+  
+                    <li>
+                        <a href="{% url 'dashboard_external_pfm' %}"><b>PFM Tracker</b></a>
+                    </li>
+                
+                </ul>
+            </li>
  
             {% if user.is_staff %}
             <li>

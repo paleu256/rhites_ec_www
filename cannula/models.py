@@ -1333,7 +1333,7 @@ class health_subcounty(models.Model):
 
 class gbvTool(models.Model):
     roid=models.ForeignKey(region,on_delete=CASCADE)
-    doid=models.ForeignKey(district,on_delete=CASCADE)
+    doid=models.ForeignKey(district,on_delete=CASCADE,null=True,blank=True)
     hfoid=models.ForeignKey(health_facility,on_delete=CASCADE)
     reporting_period=models.DateField("Reporting Period",auto_now_add=True)
     fd1_1=models.CharField("1.1 Facility offers essential GBV care  24 hours a day OR facility helps patients to access alternative facilities that provide essential care during off-hours",max_length=4,choices=GbvQaTool_Choices,default=None)
@@ -1363,21 +1363,10 @@ class gbvTool(models.Model):
     fd1_25=models.CharField("6.3 Provider helps patient to make a safety plan",max_length=4,choices=GbvQaTool_Choices,default=None)
    
     #fd1_3=models.CharField("",max_length=4,choices=GbvQaTool_Choices,default=None)
-    #fd1_3=models.CharField("",max_length=4,choices=GbvQaTool_Choices,default=None)
-    #fd1_3=models.CharField("",max_length=4,choices=GbvQaTool_Choices,default=None)
-    #fd1_3=models.CharField("",max_length=4,choices=GbvQaTool_Choices,default=None)
-    #fd1_3=models.CharField("",max_length=4,choices=GbvQaTool_Choices,default=None)
-    #fd1_3=models.CharField("",max_length=4,choices=GbvQaTool_Choices,default=None)
-    #fd1_3=models.CharField("",max_length=4,choices=GbvQaTool_Choices,default=None)
-    #fd1_3=models.CharField("",max_length=4,choices=GbvQaTool_Choices,default=None)
-    #fd1_3=models.CharField("",max_length=4,choices=GbvQaTool_Choices,default=None)
-    #fd1_3=models.CharField("",max_length=4,choices=GbvQaTool_Choices,default=None)
-
-    #fd1_3=models.CharField("",max_length=4,choices=GbvQaTool_Choices,default=None)
     def is_upperclass(self):
         return self.__class__.__name__
     
-class gbvTool2(models.Model):
+class gbvToolB(models.Model):
     rgbv_oid=models.ForeignKey(gbvTool,on_delete=CASCADE)
     fd1_26=models.CharField("7.1 Provider obtains written  or verbal informed consent (or informed assent from minors),  including explaining to the patient what the History and Examination form and police form entails and how resulting information may be used, prior to medical examination or procedure",max_length=4,choices=GbvQaTool_Choices,default=None)
     fd1_27=models.CharField("7.2 Provider obtains written or verbal consent for HIV counseling and testing",max_length=4,choices=GbvQaTool_Choices,default=None)
@@ -1403,8 +1392,103 @@ class gbvTool2(models.Model):
     fd1_47=models.CharField("11.1 Provider does not share any information regarding the patient or the violent incident(s) with anyone who is not directly involved in the patient’s care",max_length=4,choices=GbvQaTool_Choices,default=None)
     fd1_48=models.CharField("11.2 Provider allows only authorized people into the consultation or exam (e.g., authorized people could be patient’s preferred companion or staff involved in the patient’s care)",max_length=4,choices=GbvQaTool_Choices,default=None)
     fd1_49=models.CharField("11.3 Provider gives patient adequate time, space, and privacy in order to undress and dress for exams ",max_length=4,choices=GbvQaTool_Choices,default=None)
-
+    fd1_50=models.CharField("11.4 Facility keeps patient files, medico-legal forms, GBV register, forensic evidence and any other documents with identifying information about the patient securely in a locked cupboard, locker or locked room, according to national guidelines and facility protocols",max_length=4,choices=GbvQaTool_Choices,default=None)
+    fd1_51=models.CharField("11.5 Facility has a written SOP in place to govern who can access patient files, medico-legal forms, and forensic evidence",max_length=4,choices=GbvQaTool_Choices,default=None)
+    fd1_52=models.CharField("12.1 Provider takes care to minimize pain during exam ",max_length=4,choices=GbvQaTool_Choices,default=None)
+    fd1_53=models.CharField("12.2 Provider gives pain relief medication when requested or as necessary",max_length=4,choices=GbvQaTool_Choices,default=None)
+    fd1_54=models.CharField("12.3 Provider keeps patient’s body covered with gown or sheet as much as possible throughout exam, so as to avoid unnecessary or traumatic bodily exposure",max_length=4,choices=GbvQaTool_Choices,default=None)
+    fd1_55=models.CharField("12.4 Facility offers patient the choice of the sex of the provider to conduct the examination. If provider of preferred sex is not available, facility offers the patient to have a staff member of the same sex present in the examination room",max_length=4,choices=GbvQaTool_Choices,default=None)
+    fd1_56=models.CharField("12.5 Facility offers inpatients and those staying in the on-site shelter/safe room simple food and fluids (to be given after medico-legal exam if patient has consented to one)",max_length=4,choices=GbvQaTool_Choices,default=None)
+    fd1_57=models.CharField("13.1 Provider documents findings from medical examination and treatment in patient’s record  as complete and detailed manner as possible including document injuries on a body map/ pictogram/ traumagram, and observation and documentation of any petechiae  on the scalp, behind ears, in the mouth, and in the sclera of eyes",max_length=4,choices=GbvQaTool_Choices,default=None)
+    fd1_58=models.CharField("13.2 Provider uses speculum only when appropriate and only if the provider has been trained on its proper use",max_length=4,choices=GbvQaTool_Choices,default=None)
+    fd1_59=models.CharField("13.3 If patient has been strangled or choked, provider tells patient to return to the clinic if experiencing any new onset of: difficulty breathing, voice changes, or signs of respiratory distress up to 72 hours after the assault, as this may be related to possible swelling in the tissue surrounding the trachea",max_length=4,choices=GbvQaTool_Choices,default=None)
+    fd1_60=models.CharField("13.4 If patient is experiencing heavy or prolonged anal bleeding, trained provider uses anoscope for anal exam, or refers patient to higher level facility.",max_length=4,choices=GbvQaTool_Choices,default=None)
+    fd1_61=models.CharField("14.1 Provider offers oral emergency contraception (EC) within 5 days (120 hours) of the assault, according to national guidelines",max_length=4,choices=GbvQaTool_Choices,default=None)
+    fd1_62=models.CharField("14.2 If oral EC is not available, and if it is appropriate, a trained provider offers to insert a copper-bearing intrauterine device (IUCD) only if the patient is seeking ongoing pregnancy prevention",max_length=4,choices=GbvQaTool_Choices,default=None)
+    fd1_63=models.CharField("14.3 If IUCD is selected, a provider trained in IUCD insertion inserts it within 120 hours (5 days) of sexual assault",max_length=4,choices=GbvQaTool_Choices,default=None)
+    fd1_64=models.CharField("14.4 If patient declines EC, provider gives information that EC is less effective as time passes, and emphasizes the importance of returning back to the facility for follow-up pregnancy testing, referral feedback and monitoring",max_length=4,choices=GbvQaTool_Choices,default=None)
+    
     #fd1_3=models.CharField("",max_length=4,choices=GbvQaTool_Choices,default=None)
+    def is_upperclass(self):
+        return self.__class__.__name__
+    
+class gbvToolC(models.Model):
+    rgbv_oid=models.ForeignKey(gbvTool,on_delete=CASCADE)
+    fd1_65=models.CharField("15.1 For sexual assault survivors, provider offers HIV counseling and testing as per national guidelines",max_length=4,choices=GbvQaTool_Choices,default=None)
+    fd1_66=models.CharField("15.2 If the patient tests negative for HIV and the assault occurred within the past 72 hours, provider discusses the various risk factors for HIV infection with the patient to determine the patient’s need for PEP",max_length=4,choices=GbvQaTool_Choices,default=None)
+    fd1_67=models.CharField("15.3 If patient tests negative for HIV AND the sexual assault occurred within previous 72 hours, provider offers full 28 day dosage of PEP in a two or three-drug regimen, or in accordance with national guidance",max_length=4,choices=GbvQaTool_Choices,default=None)
+    fd1_68=models.CharField("15.4 If patient is a child and tests HIV negative, provider prescribes appropriate pediatric PEP dosage according to national guidance",max_length=4,choices=GbvQaTool_Choices,default=None)
+    fd1_69=models.CharField("15.5 If PEP is given, provider counsels on side effects, the importance of adherence, and the importance of completing the full course of treatment to ensure PEP effectively reduces the risk for HIV infection",max_length=4,choices=GbvQaTool_Choices,default=None)
+    fd1_70=models.CharField("15.6 If PEP is given, facility has a tracking and follow-up system in place for ensuring and documenting PEP regimen completion ",max_length=4,choices=GbvQaTool_Choices,default=None)
+    fd1_71=models.CharField("15.7 If patient tests positive for HIV and is interested in disclosing status to partner or family members, provider assesses for IPV and offers tailored guidance on how to disclose patient’s HIV status to avoid disclosure-related violence, without pressuring patient to disclose",max_length=4,choices=GbvQaTool_Choices,default=None)
+    fd1_72=models.CharField("15.8 If patient refuses an HIV test and serostatus is unknown, and assault occurred within previous 72 hours, provider still offers PEP and encourages patient to return for HIV counseling and testing",max_length=4,choices=GbvQaTool_Choices,default=None)
+    fd1_73=models.CharField("16.1 Provider offers prophylaxis or treatment for sexually transmitted infections (STIs), and the choice of drugs and regimens follows national guidelines",max_length=4,choices=GbvQaTool_Choices,default=None)
+    fd1_74=models.CharField("16.2 Provider gives tetanus vaccination if patient has not had one in past ten years, or is uncertain about vaccination status",max_length=4,choices=GbvQaTool_Choices,default=None)
+    fd1_75=models.CharField("16.3 Provider gives Hepatitis B vaccination within 24 hours of assault if the patient is not already immune (determined through a blood test) according to the national guidelines",max_length=4,choices=GbvQaTool_Choices,default=None)
+    fd1_76=models.CharField("17.1 Provider offers basic counseling including active listening, empathy, reassurance, and identification of social support ",max_length=4,choices=GbvQaTool_Choices,default=None)
+    fd1_77=models.CharField("17.2 Providers with a good understanding of violence deliver mental health care to patients, according to national guidelines ",max_length=4,choices=GbvQaTool_Choices,default=None)
+    fd1_78=models.CharField("17.3 Provider offers referrals to long-term mental health care and/or support groups",max_length=4,choices=GbvQaTool_Choices,default=None)
+    fd1_79=models.CharField("18.1 Provider conducts forensic examination and evidence collection IF the following are in place",max_length=4,choices=GbvQaTool_Choices,default=None)
+    fd1_80=models.CharField("18.2 Provider who has been trained in forensics takes a detailed forensic history as appropriate from the patient or guardian",max_length=4,choices=GbvQaTool_Choices,default=None)
+    fd1_81=models.CharField("18.3 Provider who has been trained in forensics collects and documents appropriate evidence (in addition to documentation of injuries above) within 5 days of sexual assault or at any time during the cycle of interpersonal violence, based upon the patient’s history",max_length=4,choices=GbvQaTool_Choices,default=None)
+    fd1_82=models.CharField("19.1 Provider is aware of the importance of forensic evidence collection as evidence to present in a criminal case",max_length=4,choices=GbvQaTool_Choices,default=None)
+    fd1_83=models.CharField("19.2 Providers use a standard protocol, checklist or kit to collect, package and seal forensic evidence correctly, and store it securely",max_length=4,choices=GbvQaTool_Choices,default=None)
+    fd1_84=models.CharField("19.3 Provider is aware of frequently-observed patterns of bruising, laceration and abrasion that are indicative of GBV",max_length=4,choices=GbvQaTool_Choices,default=None)
+    fd1_85=models.CharField("19.4 Provider asks questions to clarify his or her understanding when there are injuries or patterns observed that do not match the medical or forensic history",max_length=4,choices=GbvQaTool_Choices,default=None)
+    fd1_86=models.CharField("19.5 Provider wears clean gloves throughout the evidence collection process and changes gloves frequently when examining different body areas and between patients to avoid contamination",max_length=4,choices=GbvQaTool_Choices,default=None)
+    fd1_87=models.CharField("19.6 Provider collects forensic evidence within 5 days of the assault, since the likelihood of obtaining viable specimens decreases over time",max_length=4,choices=GbvQaTool_Choices,default=None)
+    fd1_88=models.CharField("19.7 When collecting specimens for medical testing and forensic samples, provider collects forensic samples first since there is an increased likelihood of obtaining biologic materials within the first specimens collected",max_length=4,choices=GbvQaTool_Choices,default=None)
+    fd1_89=models.CharField("19.8 Provider maintains chain of custody  for appropriate and secure collection, storage, and transfer of evidence, including forensic photodocumentation",max_length=4,choices=GbvQaTool_Choices,default=None)
+    fd1_90=models.CharField("19.9 Facility has systems in place to minimize the number of people who handle the evidence to maintain the chain of custody",max_length=4,choices=GbvQaTool_Choices,default=None)
+    fd1_91=models.CharField("19.10 Facility has systems in place to support and build the capacity of the provider to testify in court, if called upon to do so",max_length=4,choices=GbvQaTool_Choices,default=None)
+    fd1_92=models.CharField("19.11 If patient gives consent, the provider offering care documents injuries with photographs and ruler, taken with a good quality camera with flash, explaining that these pictures are for the confidential use of the facility to ensure patient receives the most appropriate clinical care, or for use in court and will not be shared publicly or at trial",max_length=4,choices=GbvQaTool_Choices,default=None)
+    fd1_93=models.CharField("20.1 Provider tells the patient about other available services and makes written referrals to the following services if relevant and wanted by the patient (including community-based services):",max_length=4,choices=GbvQaTool_Choices,default=None)
+    fd1_94=models.CharField("20.2 If facility does not have a functioning laboratory, provider offers a referral to a nearby laboratory (for blood and pregnancy tests, etc.)",max_length=4,choices=GbvQaTool_Choices,default=None)
+    fd1_95=models.CharField("20.3 Facility has a system in place to document referral linkage(s) through confirmation with the referral facility, patient, referral card system or other method",max_length=4,choices=GbvQaTool_Choices,default=None)
+    fd1_96=models.CharField("20.4 Facility informs stakeholders (police, community organizations, etc.) about the GBV services that are available at the facility, and during what hours they are provided. Facility makes clear that all survivors are welcome, and that seeking GBV care does not mean the survivor will have to pursue a legal case",max_length=4,choices=GbvQaTool_Choices,default=None)
+    fd1_97=models.CharField("20.5 Facility has a list of support services that have been mapped at the local, district and provincial/state levels, and this referral directory is available for on-site review",max_length=4,choices=GbvQaTool_Choices,default=None)
+    fd1_98=models.CharField("20.6 Facility updates the referral directory at least once per year by calling phone numbers and/or visiting locations, adding newly-available resources, and deleting resources that no longer exist",max_length=4,choices=GbvQaTool_Choices,default=None)
+    fd1_99=models.CharField("21.1 Provider gives as much information as possible and provides all necessary referrals to the patient on the initial visit, in case the patient does not return for follow-up",max_length=4,choices=GbvQaTool_Choices,default=None)
+    fd1_100=models.CharField("21.2 Facility has a system in place to follow up with patients",max_length=4,choices=GbvQaTool_Choices,default=None)
+    fd1_101=models.CharField("21.3 Provider or follow up team monitors the patient’s clinical condition and treatment including HIV and pregnancy test results, and provides counseling and support over time",max_length=4,choices=GbvQaTool_Choices,default=None)
+    fd1_102=models.CharField("21.4 Provider asks patient if s/he consents to follow up by phone or SMS text message, and documents a number where patient can be safely and privately contacted",max_length=4,choices=GbvQaTool_Choices,default=None)
+    fd1_103=models.CharField("21.5 Facility offers providers a budget, phone credit or mobile phone credit (airtime) to make follow-up phone calls or SMS text messages to patients who consent to being contacted this way",max_length=4,choices=GbvQaTool_Choices,default=None)
+    fd1_104=models.CharField("21.6 Facility has a focal point or team who help coordinate each patient’s care, treatment, follow-up and linkages with referral services ",max_length=4,choices=GbvQaTool_Choices,default=None)
+    fd1_105=models.CharField("21.7 Provider and/or focal point follow up with the patient at time intervals according to national guidelines, or at a minimum, 1 month after assault and again at 2 months after assault ",max_length=4,choices=GbvQaTool_Choices,default=None)
+    fd1_106=models.CharField("21.8 Provider encourages follow up visits through strategies including issuing appointment cards, phone call or SMS reminders, home visits, personal accompaniment to services if patient has consented to being contacted this way",max_length=4,choices=GbvQaTool_Choices,default=None)
+   
+   
+    #fd1_100=models.CharField("",max_length=4,choices=GbvQaTool_Choices,default=None)
+    def is_upperclass(self):
+        return self.__class__.__name__
+    
+class gbvToolD(models.Model):
+    rgbv_oid=models.ForeignKey(gbvTool,on_delete=CASCADE)
+    fd1_107=models.CharField("22.1 Facility has at least  two  service providers trained in GBV",max_length=4,choices=GbvQaTool_Choices,default=None)
+    fd1_108=models.CharField("22.2 Providers receive training   relevant to their roles and responsibilities. Training should include critical GBV elements such as patient intake, informed consent and assent, first-line support, patient confidentiality and privacy, routine enquiry, documentation, PEP, EC, clinical examination, HTC, referrals, forensic, testifying in court",max_length=4,choices=GbvQaTool_Choices,default=None)
+    fd1_109=models.CharField("23.1 Facility has a supervision plan in place that results in the direct observation of at least one patient-provider interaction per year for each provider offering GBV care",max_length=4,choices=GbvQaTool_Choices,default=None)
+    fd1_110=models.CharField("23.2 Providers receive verbal or written feedback from a supervisor after each directly observed patient-provider interaction",max_length=4,choices=GbvQaTool_Choices,default=None)
+    fd1_111=models.CharField("23.3 Facility has at least one feedback mechanism for patients to anonymously report their level of satisfaction or any grievances with services, including any violation of her/his rights (e.g., regular patient satisfaction surveys, community feedback forum, suggestion box, ombudsman or phone helpline)",max_length=4,choices=GbvQaTool_Choices,default=None)
+    fd1_112=models.CharField("23.4 Facility ensures that all staff providing GBV care receive CME.  and expand competencies via an ongoing capacity-building plan with short, targeted skill-builders, regular team meetings, and other activities, and are supported on a personal level in this work",max_length=4,choices=GbvQaTool_Choices,default=None)
+    fd1_113=models.CharField("23.5 Facility has mechanisms in place to support and promote self-care  for providers who experience secondary trauma as a result of providing post-violence care",max_length=4,choices=GbvQaTool_Choices,default=None)
+    fd1_114=models.CharField("24.1 Facility has the following guidelines and documents available on-site for review",max_length=4,choices=GbvQaTool_Choices,default=None)
+    fd1_115=models.CharField("24.2 Providers know of and utilize these guidelines and documents",max_length=4,choices=GbvQaTool_Choices,default=None)
+    fd1_116=models.CharField("25.1 Facility works with other services to integrate GBV enquiry and care into their programs (e.g., HIV, antenatal care, family planning counseling, etc.) ",max_length=4,choices=GbvQaTool_Choices,default=None)
+    fd1_117=models.CharField("25.2 Facility has a community liaison to raise awareness of GBV and the services that are available OR facility conducts outreach in local communities to raise awareness",max_length=4,choices=GbvQaTool_Choices,default=None)
+    fd1_118=models.CharField("26.1 Provider collects and documents the following information about a patient’s experience of GBV and the post-GBV care s/he received, if available",max_length=4,choices=GbvQaTool_Choices,default=None)
+    fd1_119=models.CharField("26.2 Provider fills medical records and forms completely with all relevant information (SEE CHART REVIEW TOOL FOR SCORING INSTRUCTIONS)",max_length=4,choices=GbvQaTool_Choices,default=None)
+    fd1_120=models.CharField("27.1 Providers have been trained in how to collect and enter data",max_length=4,choices=GbvQaTool_Choices,default=None)
+    fd1_121=models.CharField("27.2 Adherence to proper data collection methods is verified (e.g., supervisor periodically reviews a sample of charts to assess quality and consistency)",max_length=4,choices=GbvQaTool_Choices,default=None)
+    fd1_122=models.CharField("28.1 GBV data are disaggregated by sex (male and female)",max_length=4,choices=GbvQaTool_Choices,default=None)
+    fd1_123=models.CharField("28.2 GBV data are disaggregated by age in years  (0-4, 5-9, 10-14, 15-19, 20-24, 25-29, 30-49, 50-59, 60+)",max_length=4,choices=GbvQaTool_Choices,default=None)
+    fd1_124=models.CharField("28.3 GBV data are disaggregated by types of violence experienced and whether the perpetrator was an intimate partner or non-partner",max_length=4,choices=GbvQaTool_Choices,default=None)
+    fd1_125=models.CharField("28.4 GBV data includes the number of sexual assault survivors who received PEP at the facility within the 72 hour window",max_length=4,choices=GbvQaTool_Choices,default=None)
+    fd1_126=models.CharField("28.5 GBV data include the number of people who completed the PEP regimen",max_length=4,choices=GbvQaTool_Choices,default=None)
+    fd1_127=models.CharField("28.6 GBV service data  are linked to HIV and other health services data through common unique identifiers (such as a numeric code), a central filing system, or shared electronic medical records system",max_length=4,choices=GbvQaTool_Choices,default=None)
+    fd1_128=models.CharField("28.7 Data reports for GBV statistics (with no personal identifying information of patients) are available for sharing with management team, referral partners and other appropriate, relevant stakeholders, when safe and prudent to do so",max_length=4,choices=GbvQaTool_Choices,default=None)
+    fd1_129=models.CharField("28.8 Improvement plans for service delivery are made after GBV data are reviewed, including changes or updates to the services offered, approaches used, and commodities procured",max_length=4,choices=GbvQaTool_Choices,default=None)
+    
+    #fd1_100=models.CharField("",max_length=4,choices=GbvQaTool_Choices,default=None)
     def is_upperclass(self):
         return self.__class__.__name__
     

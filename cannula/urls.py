@@ -43,6 +43,9 @@ urlpatterns = [
     url(r'dashboards/prev/$', views.index, name='thematic_prev'),
     url(r'scorecards/prev/tb_prev\.php', views.tb_prev, name='prev'),
     url(r'scorecards/prev/tb_prev_summary\.php', views.tb_prev_summary, name='prev_summary'),
+
+    #External reports
+    url(r'scorecards/reports/quater/pfmtracker/regions\.asp.Net', views.dashboard_external_pfm, name='dashboard_external_pfm'),
     
    
 

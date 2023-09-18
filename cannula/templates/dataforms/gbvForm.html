@@ -101,7 +101,6 @@ input {
     color: #f3f3f3;    
 }
 
-
 body1 {
     font-family: Montserrat,'Segoe UI', Tahoma, 'Geneva', 'Verdana', sans-serif;
     margin: 10;
@@ -175,13 +174,11 @@ body1 {
      <div class="progressbar">
         <div class="progress" id="progress"></div>
         <div class="progress-step progress-step-active" data-tittle="Introction"></div>
-        <div class="progress-step" data-tittle="Facility Background"></div>
-        <div class="progress-step" data-tittle="SERVICES and INFRASTRUCTURE"></div>
-        <div class="progress-step" data-tittle="step5"></div>
-        <div class="progress-step" data-tittle="step 6"></div>
-        <div class="progress-step" data-tittle="step 7"></div>
-        <div class="progress-step" data-tittle="step 8"></div>
-        <div class="progress-step" data-tittle="step 9"></div>
+        <div class="progress-step" data-tittle="Step 1"></div>
+        <div class="progress-step" data-tittle="Step 2"></div>
+        <div class="progress-step" data-tittle="Step 3"></div>
+        <div class="progress-step" data-tittle="Step 4"></div>
+        <div class="progress-step" data-tittle="Step 5"></div>
      </div>
 
     <!--Steps Step 1-->
@@ -245,10 +242,10 @@ body1 {
         </div>
     </div>
 
-     <!--Steps Step MORE 1-->
      <div class="form-step">
         <div class="input-group">
-          <P>CONTENT HERE 1</P>
+        <P>This section contains the following groups 123</P>
+          {{ gbvFormB.as_p }}
        </div>
 
        <div class="btns-group">
@@ -257,9 +254,11 @@ body1 {
        </div>
    </div>
 
+    <!--Steps Step MORE 1-->
    <div class="form-step">
    <div class="input-group">
-    <P>CONTENT HERE 2</P>
+    <P>This section contains the following groups..</P>
+        {{ gbvFormC.as_p }}  
    </div>
 
    <div class="btns-group">
@@ -270,15 +269,17 @@ body1 {
 
    <div class="form-step">
     <div class="input-group">
-     <P>CONTENT HERE 3</P>
+     <P>This section contains the following groups:VII. TRAINING AND QUALITY IMPROVEMENT,VIII. HEALTH CARE POLICY AND PROVISION,IX. OUTREACH and X. REPORTING AND INFORMATION SYSTEMS</P>
+        {{ gbvFormD.as_p }} 
     </div>
  
     <div class="btns-group">
         <a href="#" class="btn btn-prev">Previous</a>
-        <a href="#" class="btn btn-next">Next</a>
+        <input type="submit" class="btn" value="Submit">
     </div>
     </div>
 
+    <!--
     <div class="form-step">
         <div class="input-group">
          <P>CONTENT HERE 4</P>
@@ -290,7 +291,7 @@ body1 {
         </div>
         </div>
 
-     <!--Steps Step 4-last step-->
+     Steps Step 4-last step
         <div class="form-step">
         
          <div class="input-group">
@@ -302,6 +303,7 @@ body1 {
             <input type="submit" class="btn" value="Submit">
         </div>
     </div>
+    -->
 
    </div>
 
