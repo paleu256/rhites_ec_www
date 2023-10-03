@@ -1,7 +1,7 @@
 {% extends "startmin/base.html" %} {% block title %}UHA Database{% endblock %} 
-{% block heading %} USAID’s Uganda Health Activity (UHA) Uganda {% endblock %} 
+{% block heading %} Welcome to the US<span id="usaid-red">AID</span> Uganda Health Activity (UHA) Performance monitoring dashboard {% endblock %} 
 {% block content %}
-{% load staticfiles %}
+{% load static %}
 
 <style>
 
@@ -14,49 +14,88 @@
                 height: 100px;
                 width: 48%;
         }
+        .page-header {
+                color: #094780;
+                font-weight: bold;
+                text-align:center;
+                font-size:44px;
+        }
+        #usaid-red {
+                color:#ba0c2f;
+        }
+        .kpi-header {
+                color: #094780;
+                font-weight: bold;
+                font-size: 24px;
+                text-align:center;
+        }
+        #kpi-divs {
+                margin-left: auto;
+                margin-right: auto;
+                width:100%;
+              }
+        .report-container {
+                padding:10px;
+                margin:10px 10px 10px 10px;
+        }
+        .p-narrative {
+                background-color:#19447c;
+                color: #FFF;
+                padding:2px;
+        }
+        .narrative-text {
+                font-size:24px;
+        }
+        .embed-container {
+                position: relative;
+                padding-bottom: 70.75%;
+                height: 0;
+                overflow: hidden;
+                }
+        .embed-container iframe {
+                position: absolute;
+                top:0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                }
+
 </style>
 
 <html>
 
 <body>
-
-        <div>
-                <div class="div1">
-                        <img class="wrap" src="{% static 'cannula/imageone1.png' %}" hspace="5" />
-
-                        <p><b>WHO ARE WE?</b></p>
-                        <p>Content Still missing </p>
-
-                        <img class="wrap" src="{% static 'cannula/imagetwo1.png' %}" hspace="5" />
-                        <p><b><br><br>Content Still missing
-                                </b></p>
-                       
-                </div>
-
-                <div class="div1" style="margin-left:15px">
-                        <img class="wrap" src="{% static 'cannula/imagethree1.png' %}" hspace="5" />
-
-                        <p><b>WHAT HAVE WE DONE?</b></p>
-                        <p><b></b></p>
-                        <p>
-                                Content Still missing
-                        </p>
-                        <p><b>Facilitating evidence-based decision making</b></p>
-                        <p>
-                                Content Still missing
-                        </p>
-                        <p><b>Improving data quality and integrity</b></p>
-                        <p>
-                                Content Still missing
-                        </p>
-
-                </div>
-
+        <div id="kpi-heading">
+                <p class="kpi-header">Key activity achievements</p>
         </div>
-
-
-
+        <div id="kpis">
+                <table id="kpi-divs">
+                        <tr>
+                                <td class="report-container">                
+                                        <div class="embed-container">
+                                                <iframe title="Report Section" width="100%" height="100%" src="https://app.powerbi.com/view?r=eyJrIjoiNjljMzdhYTktMzljMy00ZDMyLWEwMWQtMWVjNzg5Y2RlMDMzIiwidCI6IjAxMDMxYTUxLWVhMWQtNDdkNi05ODhhLWQ2NjU3MjVhOWIyMiIsImMiOjF9" frameborder="0" allowFullScreen="true"></iframe>
+                                        </div>
+                                </td>
+                                <td class="report-container"> 
+                                        <div class="embed-container">
+                                                <iframe title="Report Section" width="100%" height="100%" src="https://app.powerbi.com/view?r=eyJrIjoiNDliNzBlZWMtNTYxNy00NDg0LWI1M2YtMmNkNWFhZDg1MDc4IiwidCI6IjAxMDMxYTUxLWVhMWQtNDdkNi05ODhhLWQ2NjU3MjVhOWIyMiIsImMiOjF9" frameborder="0" allowFullScreen="true"></iframe>
+                                        </div>
+                                </td>                            
+                        </tr>
+                        <tr>
+                                <td class="report-container">                
+                                        <div class="embed-container">
+                                                <iframe title="Report Section" width="100%" height="100%" src="https://app.powerbi.com/view?r=eyJrIjoiYWQyMmNkMzYtOWU0Mi00ZjExLWJlZTAtOGNiOGJmMWVjMzc4IiwidCI6IjAxMDMxYTUxLWVhMWQtNDdkNi05ODhhLWQ2NjU3MjVhOWIyMiIsImMiOjF9" frameborder="0" allowFullScreen="true"></iframe>
+                                        </div>
+                                </td>
+                                <td class="report-container">    
+                                        <div class="embed-container">
+                                                
+                                        </div>
+                                </td>                            
+                        </tr>
+                </table>
+        </div>
 </body>
-
 </html>
 {% endblock %}
